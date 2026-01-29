@@ -1,0 +1,3023 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Financeiro Centro Médico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f4f9;
+      width: 100%;
+      height: 100%;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .dashboard-wrapper {
+      width: 100%;
+      min-height: 100%;
+      padding: 32px;
+      background: #f4f4f9;
+    }
+    
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .header-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .header-btn:active {
+      transform: translateY(0);
+    }
+    
+    .export-btn {
+      background: rgb(59, 130, 246);
+      color: white;
+    }
+    
+    .export-btn:hover {
+      background: rgb(37, 99, 235);
+    }
+    
+    .clear-btn {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .clear-btn:hover {
+      background: #c82333;
+    }
+    
+    .logo-placeholder {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #0056b3 0%, #0084d4 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+    }
+    
+    .main-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0056b3;
+      margin: 0;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .summary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .summary-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+    
+    .summary-card.bruto {
+      border-left-color: #0056b3;
+      background: linear-gradient(to right, #f0f7ff 0%, white 100%);
+    }
+    
+    .summary-card.liquido {
+      border-left-color: #28a745;
+      background: linear-gradient(to right, #f0fff4 0%, white 100%);
+    }
+    
+    .summary-label {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    .summary-value {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .summary-card.bruto .summary-value {
+      color: #0056b3;
+    }
+    
+    .summary-card.liquido .summary-value {
+      color: #28a745;
+    }
+    
+    .detail-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    .detail-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #e9ecef;
+      transition: background 0.2s;
+    }
+    
+    .detail-card:hover {
+      background: #e9ecef;
+    }
+    
+    .detail-card.unimed {
+      background: linear-gradient(135deg, #e6d9ff 0%, #f0e6ff 100%);
+      border-color: #9966ff;
+    }
+    
+    .detail-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    
+    .detail-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .detail-card.unimed .detail-value {
+      color: #7c3aed;
+    }
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .chart-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .chart-placeholder {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .table-container {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow-x: auto;
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    
+    .data-table thead {
+      background: #f8f9fa;
+    }
+    
+    .data-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #666;
+      border-bottom: 2px solid #dee2e6;
+    }
+    
+    .data-table th.liquido-col {
+      color: #28a745;
+    }
+    
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+    }
+    
+    .data-table tbody tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .value-liquido {
+      color: #28a745;
+      font-weight: 600;
+    }
+    
+    .action-btn {
+      padding: 6px 12px;
+      background: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .action-btn:hover {
+      background: #004494;
+    }
+    
+    .form-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    
+    .form-input,
+    .form-select {
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: #0056b3;
+      box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    }
+    
+    .submit-btn {
+      padding: 14px 32px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+    
+    .submit-btn:hover {
+      background: #218838;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-wrapper {
+        padding: 16px;
+      }
+      
+      .main-title {
+        font-size: 24px;
+      }
+      
+      .summary-value {
+        font-size: 28px;
+      }
+      
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .detail-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Tela de Login -->
+  <div id="loginScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+   <div style="background: white; padding: 48px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 400px; width: 90%;">
+    <div style="text-align: center; margin-bottom: 32px;">
+     <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #0056b3 0%, #0084d4 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(0, 86, 179, 0.3);">
+      🏥
+     </div>
+     <h1 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 700; color: #333;">Centro Médico</h1>
+     <p style="margin: 0; font-size: 14px; color: #666;">Sistema de Controle Financeiro</p>
+    </div>
+    <form id="loginForm">
+     <div style="margin-bottom: 20px;"><label for="loginUsername" style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">👤 Login</label> <input type="text" id="loginUsername" placeholder="Digite seu login" required style="width: 100%; padding: 14px; border: 2px solid #dee2e6; border-radius: 12px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.2s;">
+     </div>
+     <div style="margin-bottom: 24px;"><label for="loginPassword" style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">🔒 Senha</label> <input type="password" id="loginPassword" placeholder="Digite sua senha" required style="width: 100%; padding: 14px; border: 2px solid #dee2e6; border-radius: 12px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.2s;">
+     </div>
+     <div id="loginError" style="display: none; background: #fee; border-left: 4px solid #dc3545; padding: 12px; border-radius: 8px; margin-bottom: 20px;"><span style="color: #dc3545; font-size: 13px; font-weight: 600;">❌ Login ou senha incorretos</span>
+     </div><button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0056b3 0%, #0084d4 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);"> Entrar no Sistema </button>
+    </form>
+    <div style="margin-top: 24px; text-align: center; padding-top: 24px; border-top: 1px solid #e9ecef;">
+     <p style="margin: 0; font-size: 12px; color: #999;">🔒 Acesso restrito a usuários autorizados</p>
+    </div>
+   </div>
+  </div>
+  <div class="dashboard-wrapper" id="dashboardWrapper" style="display: none;">
+   <div class="dashboard-container"><!-- Header -->
+    <div class="header">
+     <div class="logo-placeholder">
+      🏥
+     </div>
+     <div style="flex: 1;">
+      <h1 class="main-title" id="mainTitle">Controle Financeiro Centro Médico</h1>
+      <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+       Gestão completa de recebimentos, despesas e comissões
+      </div>
+     </div>
+     <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button onclick="exportarDadosParaArquivo()" class="header-btn export-btn">📥 Exportar</button> <label class="header-btn" style="cursor: pointer; display: flex; align-items: center;"> 📤 Importar <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarDadosDeArquivo(this)"> </label> <button onclick="limparTodosDados()" class="header-btn clear-btn">🗑️ Limpar Tudo</button>
+     </div>
+    </div><!-- Calendário de Navegação Diária -->
+    <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #333;">📅 Navegação por Dia</h2><button id="btnHoje" style="padding: 10px 20px; background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,86,179,0.3);"> 📌 Voltar para Hoje </button>
+     </div>
+     <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;"><button id="btnDiaAnterior" style="padding: 12px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;"> ← Dia Anterior </button>
+      <div id="dataAtualDisplay" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 32px; border-radius: 12px; text-align: center; min-width: 300px; box-shadow: 0 4px 12px rgba(102,126,234,0.3);">
+       <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px; font-weight: 500;">
+        Visualizando
+       </div>
+       <div style="font-size: 24px; font-weight: 700;" id="dataAtualTexto">
+        Carregando...
+       </div>
+       <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;" id="statusDia">
+        -
+       </div>
+      </div><button id="btnProximoDia" style="padding: 12px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;"> Próximo Dia → </button>
+     </div>
+     <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 8px; text-align: center;">
+      <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
+       📊 Resumo do Dia Selecionado
+      </div>
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;">
+       <div><span style="font-size: 11px; color: #666;">Recebimentos:</span> <strong style="color: #10b981; font-size: 16px; margin-left: 4px;" id="resumoDiaRecebimentos">R$ 0,00</strong>
+       </div>
+       <div><span style="font-size: 11px; color: #666;">Despesas:</span> <strong style="color: #dc3545; font-size: 16px; margin-left: 4px;" id="resumoDiaDespesas">R$ 0,00</strong>
+       </div>
+       <div><span style="font-size: 11px; color: #666;">Liquido:</span> <strong style="color: #0056b3; font-size: 16px; margin-left: 4px;" id="resumoDiaLiquido">R$ 0,00</strong>
+       </div>
+      </div>
+     </div>
+    </div><!-- Summary Cards -->
+    <div class="summary-grid">
+     <div class="summary-card bruto">
+      <div class="summary-label" id="totalBrutoLabel">
+       Total Bruto Recebido
+      </div>
+      <div class="summary-value">
+       R$ 0,00
+      </div>
+     </div>
+     <div class="summary-card liquido">
+      <div class="summary-label" id="totalLiquidoLabel">
+       Total Líquido Clínica
+      </div>
+      <div class="summary-value">
+       R$ 0,00
+      </div>
+     </div>
+
+
+
+    </div><!-- Professional Registration Button -->
+    <div style="margin-bottom: 32px;">
+
+     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;"><button id="openProfessionalModal" class="header-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">⚕️</span> <span>Cadastrar Novo Profissional</span> </button> <button id="openPatientModal" class="header-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">👤</span> <span>Cadastrar Novo Paciente</span> </button> <button id="openPatientListModal" class="header-btn" style="background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> 
+    <span style="font-size: 24px;">🔍</span> <span>Ver Lista de Pacientes</span> 
+    
+</button>
+
+
+<div id="listaPacientesConteudo">
+    </div>
+     </div>
+
+     <div id="profissionaisLista" style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px;"><!-- Lista de profissionais será inserida aqui -->
+     </div>
+
+
+
+
+
+
+
+     <div id="modalPaciente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+  <div style="background: white; padding: 32px; border-radius: 20px; width: 90%; max-width: 550px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+        <h2 style="font-size: 22px; font-weight: 700; color: #10b981; margin: 0;">👤 Cadastrar Novo Paciente</h2>
+        <button onclick="fecharModalPaciente()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+    </div>
+    
+    <form id="patientForm">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+        <div>
+          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Nome Completo</label>
+          <input type="text" id="pacienteNome" class="form-input" style="width: 100%;" required placeholder="Digite o nome completo">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Telefone</label>
+                <input type="text" id="pacienteTelefone" class="form-input" style="width: 100%;" required placeholder="(00) 00000-0000">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Data de Nascimento</label>
+                <input type="date" id="pacienteNascimento" class="form-input" style="width: 100%;">
+            </div>
+        </div>
+
+        <div>
+          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Email (opcional)</label>
+          <input type="email" id="pacienteEmail" class="form-input" style="width: 100%;" placeholder="exemplo@email.com">
+        </div>
+
+        <div>
+          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Endereço (opcional)</label>
+          <input type="text" id="pacienteEndereco" class="form-input" style="width: 100%;" placeholder="Rua, número, bairro...">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px;">
+        <button type="button" onclick="fecharModalPaciente()" style="padding: 12px 20px; background: #f3f4f6; color: #4b5563; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancelar</button>
+        <button type="submit" style="padding: 12px 30px; background: #10b981; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Cadastrar Paciente</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+    </div><!-- Form Section -->
+    <div class="form-section"><!-- Campo de Valor Inicial do Caixa -->
+     <div style="display: flex; gap: 16px; margin-bottom: 24px; justify-content: center; align-items: center; flex-wrap: wrap; background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+      <div style="text-align: center; color: white;">
+       <div style="font-size: 13px; opacity: 0.9; margin-bottom: 4px; font-weight: 600;">
+        💰 Valor Inicial do Caixa
+       </div>
+       <div style="font-size: 28px; font-weight: 700;" id="displayValorInicial">
+        R$ 0,00
+       </div>
+      </div><button id="btnEditarValorInicial" class="header-btn" style="background: white; color: #10b981; font-size: 14px; padding: 12px 24px; display: flex; align-items: center; gap: 8px; border: 2px solid white; font-weight: 700;"> <span style="font-size: 18px;">✏️</span> <span>Editar Valor Inicial</span> </button>
+     </div>
+     <div style="display: flex; gap: 16px; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 16px;"><button id="tabRecebimento" class="tab-btn active" style="flex: 1; padding: 12px 24px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Recebimento </button> <button id="tabDespesa" class="tab-btn" style="flex: 1; padding: 12px 24px; background: #e9ecef; color: #666; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;"> 💸 Despesa </button>
+     </div><!-- Formulário de Recebimento -->
+     <div id="formRecebimento">
+      <h2 class="section-title">Registrar Novo Recebimento</h2>
+      <form id="receiptForm">
+       <div class="form-grid">
+        <div class="form-group"><label for="valorBruto" class="form-label">Valor Bruto</label> <input type="text" id="valorBruto" class="form-input" placeholder="R$ 0,00" required>
+        </div>
+        <div class="form-group"><label for="profissional" class="form-label">Profissional</label> <select id="profissional" class="form-select" required> <option value="">Selecione...</option> </select>
+        </div>
+        <div class="form-group">
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;"><label for="tipoAtendimento" class="form-label" style="margin-bottom: 0;">Tipo de Atendimento</label> <button type="button" id="gerenciarAtendimentos" style="padding: 4px 12px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.2s;">⚙️ Gerenciar</button>
+         </div><select id="tipoAtendimento" class="form-select" required> <option value="">Selecione...</option> <option value="consulta">Consulta</option> <option value="procedimento">Procedimento</option> <option value="retorno">Retorno</option> <option value="cirurgia">Cirurgia</option> </select>
+        </div>
+        <div class="form-group"><label for="formaPagamento" class="form-label">Forma de Pagamento</label> <select id="formaPagamento" class="form-select" required> <option value="">Selecione...</option> <option value="unimed">Unimed</option> <option value="cartao">Cartão</option> <option value="pix">PIX</option> <option value="dinheiro">Dinheiro</option> </select>
+        </div>
+        
+        <div class="form-group"><label for="dataRecebimento" class="form-label">Data</label> <input type="date" id="dataRecebimento" class="form-input" required>
+        </div>
+       </div><button type="submit" class="submit-btn" id="addButton">Adicionar Recebimento</button>
+      </form>
+
+
+
+     </div><!-- Formulário de Despesa -->
+     <div id="formDespesa" style="display: none;">
+      <h2 class="section-title">Registrar Nova Despesa</h2>
+      <form id="despesaForm">
+       <div class="form-grid">
+        <div class="form-group"><label for="valorDespesa" class="form-label">Valor da Despesa</label> <input type="text" id="valorDespesa" class="form-input" placeholder="R$ 0,00" required>
+        </div>
+        <div class="form-group"><label for="categoriaDespesa" class="form-label">Categoria</label> <select id="categoriaDespesa" class="form-select" required> <option value="">Selecione...</option> <option value="aluguel">Aluguel</option> <option value="energia">Energia</option> <option value="agua">Água</option> <option value="internet">Internet</option> <option value="material">Material de Consumo</option> <option value="medicamentos">Medicamentos</option> <option value="equipamentos">Equipamentos</option> <option value="limpeza">Limpeza</option> <option value="salarios">Salários</option> <option value="impostos">Impostos</option> <option value="manutencao">Manutenção</option> <option value="outros">Outros</option> </select>
+        </div>
+        <div class="form-group"><label for="descricaoDespesa" class="form-label">Descrição</label> <input type="text" id="descricaoDespesa" class="form-input" placeholder="Ex: Conta de energia do mês" required>
+        </div>
+        <div class="form-group"><label for="formaPagamentoDespesa" class="form-label">Forma de Pagamento</label> <select id="formaPagamentoDespesa" class="form-select" required> <option value="">Selecione...</option> <option value="cartao">Cartão</option> <option value="pix">PIX</option> <option value="dinheiro">Dinheiro</option> <option value="boleto">Boleto</option> </select>
+        </div>
+        <div class="form-group"><label for="dataDespesa" class="form-label">Data</label> <input type="date" id="dataDespesa" class="form-input" required>
+        </div>
+       </div><button type="submit" class="submit-btn" style="background: #dc3545;">Adicionar Despesa</button>
+      </form>
+     </div>
+
+     
+    </div><!-- Detail Section -->
+    <div class="detail-section">
+     <h2 class="section-title">Detalhamento por Conta de Recebimento</h2>
+     <div class="detail-grid">
+      <div class="detail-card" style="background: linear-gradient(135deg, #ff6384 0%, #ff8fa3 100%); border-color: #ff6384;">
+       <div class="detail-label" style="color: white;">
+        Cartão
+       </div>
+       <div class="detail-value" style="color: white;">
+        R$ 0,00
+       </div>
+      </div>
+      <div class="detail-card" style="background: linear-gradient(135deg, #4bc0c0 0%, #7dd3d3 100%); border-color: #4bc0c0;">
+       <div class="detail-label" style="color: white;">
+        PIX
+       </div>
+       <div class="detail-value" style="color: white;">
+        R$ 0,00
+       </div>
+      </div>
+      <div class="detail-card" style="background: linear-gradient(135deg, #ffcd56 0%, #ffe082 100%); border-color: #ffcd56;">
+       <div class="detail-label" style="color: #333;">
+        Dinheiro
+       </div>
+       <div class="detail-value" style="color: #333;">
+        R$ 0,00
+       </div>
+      </div>
+      <div class="detail-card" style="background: linear-gradient(135deg, #9966ff 0%, #b794ff 100%); border-color: #9966ff;">
+       <div class="detail-label" style="color: white;">
+        Unimed
+       </div>
+       <div class="detail-value" style="color: white;">
+        R$ 0,00
+       </div>
+      </div>
+     </div>
+    </div><!-- Professional Details Section -->
+    <div class="detail-section">
+     <h2 class="section-title">Detalhamento por Profissional</h2>
+     <div id="profissionaisDetalhamento" class="detail-grid">
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">
+       📊 Cadastre profissionais para ver o detalhamento aqui
+      </div>
+     </div>
+    </div><!-- Modal de Detalhamento do Profissional -->
+    <div id="modalDetalhamentoProfissional" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; overflow-y: auto; padding: 20px;">
+     <div style="max-width: 1200px; margin: 40px auto; background: white; border-radius: 16px; padding: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+      <div id="modalDetalhamentoConteudo"></div>
+     </div>
+    </div><!-- Charts -->
+    <div style="margin-bottom: 32px;">
+     <h2 style="font-size: 24px; font-weight: 700; color: #333; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #f0f0f0;">📊 Gráficos de Distribuição</h2>
+     <div class="charts-grid">
+      <div class="chart-card">
+       <h2 class="section-title" style="font-weight: 700;">Bruto por Forma de Pagamento</h2>
+       <div id="chartPagamento" class="chart-placeholder">
+        <div style="text-align: center; color: #999; font-size: 16px;">
+         📊 Gráfico será exibido após adicionar recebimentos
+        </div>
+       </div>
+      </div>
+      <div class="chart-card">
+       <h2 class="section-title" style="font-weight: 700;">Total Recebido por Tipo de Atendimento</h2>
+       <div id="chartProfissional" class="chart-placeholder">
+        <div style="text-align: center; color: #999; font-size: 16px;">
+         📊 Gráfico será exibido após adicionar recebimentos
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Table -->
+    <div class="table-container">
+     <h2 class="section-title">Histórico de Recebimentos</h2>
+     <table class="data-table">
+      <thead>
+       <tr>
+        <th>DATA</th>
+        <th>HORA</th>
+        <th>PROFISSIONAL</th>
+        <th>VALOR BRUTO</th>
+        <th>ATENDIMENTO</th>
+        <th>PAGAMENTO</th>
+        <th style="color: #dc3545;">VALOR PROF.</th>
+        <th class="liquido-col">LÍQUIDO CLÍNICA</th>
+        <th>AÇÃO</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <td colspan="9" style="text-align: center; padding: 40px; color: #999;">📋 Nenhum recebimento registrado ainda</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Sistema de Login
+    const LOGIN_CORRETO = 'centromedico';
+    const SENHA_CORRETA = 'miguel2406';
+    
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      if (username === LOGIN_CORRETO && password === SENHA_CORRETA) {
+        // Login bem-sucedido
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboardWrapper').style.display = 'block';
+        
+        const successDiv = document.createElement('div');
+        successDiv.textContent = '✅ Bem-vindo ao sistema!';
+        successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(successDiv);
+        setTimeout(() => successDiv.remove(), 3000);
+      } else {
+        // Login falhou
+        const errorDiv = document.getElementById('loginError');
+        errorDiv.style.display = 'block';
+        
+        // Adicionar animação de shake
+        const loginBox = document.querySelector('#loginScreen > div');
+        loginBox.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          loginBox.style.animation = '';
+        }, 500);
+        
+        // Limpar campos
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+        
+        setTimeout(() => {
+          errorDiv.style.display = 'none';
+        }, 3000);
+      }
+    });
+    
+    // Adicionar animação de shake no CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+      #loginUsername:focus, #loginPassword:focus {
+        border-color: #0056b3;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // ====================================
+    // SISTEMA DE ARMAZENAMENTO LOCALSTORAGE
+    // ====================================
+    const STORAGE_KEY = 'centroMedicoCamocim_v100';
+    
+    let profissionais = [];
+    let pacientes = [];
+    let recebimentos = [];
+    let despesas = [];
+    let tiposAtendimento = [];
+    let configsCaixaDia = [];
+    
+    // Controle de navegação por dia
+let dataVisualizacaoAtual = new Date().toISOString().split('T')[0];
+
+
+    
+    // Carregar dados do localStorage
+    function carregarDados() {
+      try {
+        const dadosSalvos = localStorage.getItem(STORAGE_KEY);
+        if (dadosSalvos) {
+          const dados = JSON.parse(dadosSalvos);
+          profissionais = dados.profissionais || [];
+          pacientes = dados.pacientes || [];
+          recebimentos = dados.recebimentos || [];
+          despesas = dados.despesas || [];
+          tiposAtendimento = dados.tiposAtendimento || [];
+          configsCaixaDia = dados.configsCaixaDia || [];
+          
+          console.log('✅ Dados carregados do localStorage:', {
+            profissionais: profissionais.length,
+            pacientes: pacientes.length,
+            recebimentos: recebimentos.length,
+            despesas: despesas.length,
+            tiposAtendimento: tiposAtendimento.length,
+            configsCaixaDia: configsCaixaDia.length
+          });
+        } else {
+          console.log('📂 Nenhum dado encontrado - iniciando vazio');
+        }
+      } catch (error) {
+        console.error('❌ Erro ao carregar dados:', error);
+      }
+    }
+    
+    // Salvar dados no localStorage
+    function salvarDados() {
+      try {
+        const dados = {
+          profissionais,
+          pacientes,
+          recebimentos,
+          despesas,
+          tiposAtendimento,
+          configsCaixaDia,
+          versao: '1.0.0',
+          ultimaAtualizacao: new Date().toISOString()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+        console.log('💾 Dados salvos no localStorage');
+      } catch (error) {
+        console.error('❌ Erro ao salvar dados:', error);
+        mostrarMensagem('❌ Erro ao salvar dados', 'error');
+      }
+    }
+
+
+
+
+
+
+
+    // Abrir Modal de Paciente// Funções de Controle do Modal de Paciente
+function abrirModalPaciente() {
+    // Garante que o modal de profissional esteja fechado para não abrir os dois
+    const modalProf = document.getElementById('modalProfissional');
+    if(modalProf) modalProf.style.display = 'none';
+    
+    document.getElementById('modalPaciente').style.display = 'flex';
+}
+
+function fecharModalPaciente() {
+    document.getElementById('modalPaciente').style.display = 'none';
+    document.getElementById('patientForm').reset();
+}
+
+// Evento do Botão de Abrir (Corrigido para chamar a função específica)
+document.getElementById('openPatientModal').onclick = function(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Evita que o evento suba para outros elementos
+    abrirModalPaciente();
+};
+
+// Lógica de Salvar com novos campos
+document.getElementById('patientForm').onsubmit = function(e) {
+    e.preventDefault();
+    
+    const novoPaciente = {
+        id: Date.now(),
+        nome: document.getElementById('pacienteNome').value,
+        telefone: document.getElementById('pacienteTelefone').value,
+        email: document.getElementById('pacienteEmail').value,
+        endereco: document.getElementById('pacienteEndereco').value,
+        nascimento: document.getElementById('pacienteNascimento').value,
+        dataCadastro: new Date().toISOString()
+    };
+
+    pacientes.push(novoPaciente);
+    salvarDados(); // Função já existente no seu arquivo teste.html
+    
+    fecharModalPaciente();
+    mostrarMensagem('✅ Paciente ' + novoPaciente.nome + ' cadastrado com sucesso!');
+};
+
+
+
+
+
+
+
+    
+    // Função auxiliar para mostrar mensagens
+    function mostrarMensagem(texto, tipo = 'success') {
+      const cores = {
+        success: '#10b981',
+        error: '#dc3545',
+        warning: '#f59e0b',
+        info: '#0ea5e9'
+      };
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.textContent = texto;
+      messageDiv.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${cores[tipo]}; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000; font-weight: 600;`;
+      document.body.appendChild(messageDiv);
+      setTimeout(() => messageDiv.remove(), 3000);
+    }
+    
+    // Exportar dados para arquivo JSON
+    window.exportarDadosParaArquivo = function() {
+      try {
+        const dados = {
+          profissionais,
+          pacientes,
+          recebimentos,
+          despesas,
+          tiposAtendimento,
+          configsCaixaDia,
+          versao: '1.0.0',
+          dataExportacao: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `centro-medico-backup-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        mostrarMensagem('✅ Dados exportados com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao exportar:', error);
+        mostrarMensagem('❌ Erro ao exportar dados', 'error');
+      }
+    };
+    
+    // Importar dados de arquivo JSON
+    window.importarDadosDeArquivo = function(input) {
+      const file = input.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const dados = JSON.parse(e.target.result);
+          
+          // Validar estrutura básica
+          if (!dados.profissionais || !dados.recebimentos) {
+            mostrarMensagem('❌ Arquivo inválido - estrutura incorreta', 'error');
+            return;
+          }
+          
+          // Confirmar importação
+          const confirmDiv = document.createElement('div');
+          confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 500px;';
+          confirmDiv.innerHTML = `
+            <h3 style="margin: 0 0 16px 0; color: #333;">📥 Confirmar Importação</h3>
+            <p style="margin: 0 0 8px 0; color: #666;">O arquivo contém:</p>
+            <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; text-align: left;">
+              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">⚕️ ${dados.profissionais?.length || 0} profissionais</li>
+              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">👤 ${dados.pacientes?.length || 0} pacientes</li>
+              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">💰 ${dados.recebimentos?.length || 0} recebimentos</li>
+              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">💸 ${dados.despesas?.length || 0} despesas</li>
+            </ul>
+            <p style="margin: 0 0 24px 0; color: #dc3545; font-weight: 600;">⚠️ Isso irá substituir todos os dados atuais!</p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+              <button id="confirmImport" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Importar</button>
+              <button id="cancelImport" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+            </div>
+          `;
+          
+          const backdrop = document.createElement('div');
+          backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+          
+          document.body.appendChild(backdrop);
+          document.body.appendChild(confirmDiv);
+          
+          document.getElementById('cancelImport').addEventListener('click', () => {
+            backdrop.remove();
+            confirmDiv.remove();
+            input.value = '';
+          });
+          
+          document.getElementById('confirmImport').addEventListener('click', () => {
+            profissionais = dados.profissionais || [];
+            pacientes = dados.pacientes || [];
+            recebimentos = dados.recebimentos || [];
+            despesas = dados.despesas || [];
+            tiposAtendimento = dados.tiposAtendimento || [];
+            configsCaixaDia = dados.configsCaixaDia || [];
+            
+            salvarDados();
+            atualizarInterface();
+            
+            backdrop.remove();
+            confirmDiv.remove();
+            input.value = '';
+            
+            mostrarMensagem('✅ Dados importados com sucesso!', 'success');
+          });
+          
+        } catch (error) {
+          console.error('Erro ao importar:', error);
+          mostrarMensagem('❌ Erro ao ler arquivo - JSON inválido', 'error');
+          input.value = '';
+        }
+      };
+      reader.readAsText(file);
+    };
+    
+    // Limpar todos os dados
+    window.limparTodosDados = function() {
+      const confirmDiv = document.createElement('div');
+      confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
+      confirmDiv.innerHTML = `
+        <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ ATENÇÃO!</h3>
+        <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja <strong style="color: #dc3545;">APAGAR TODOS OS DADOS</strong>?<br><br>Esta ação não pode ser desfeita!</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="confirmClear" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Limpar Tudo</button>
+          <button id="cancelClear" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+        </div>
+      `;
+      
+      const backdrop = document.createElement('div');
+      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+      
+      document.body.appendChild(backdrop);
+      document.body.appendChild(confirmDiv);
+      
+      document.getElementById('cancelClear').addEventListener('click', () => {
+        backdrop.remove();
+        confirmDiv.remove();
+      });
+      
+      document.getElementById('confirmClear').addEventListener('click', () => {
+        profissionais = [];
+        pacientes = [];
+        recebimentos = [];
+        despesas = [];
+        tiposAtendimento = [];
+        configsCaixaDia = [];
+        
+        localStorage.removeItem(STORAGE_KEY);
+        atualizarInterface();
+        
+        backdrop.remove();
+        confirmDiv.remove();
+        
+        mostrarMensagem('🗑️ Todos os dados foram apagados!', 'success');
+      });
+    };
+    
+    // Função para atualizar toda a interface
+    function atualizarInterface() {
+      renderProfissionaisList();
+      atualizarCalendarioNavegacao();
+      updateDashboard();
+      atualizarSelectTiposAtendimento();
+      atualizarDisplayValorInicial();
+    }
+    
+    // Inicializar aplicação
+    carregarDados();
+    atualizarInterface();
+    
+    // Função para atualizar display do valor inicial (por dia)
+    function atualizarDisplayValorInicial() {
+      // Buscar o valor inicial específico para o dia selecionado
+      const configDia = configsCaixaDia.find(c => c.data === dataVisualizacaoAtual);
+      
+      if (configDia) {
+        // Se existe valor para este dia, usar ele
+        document.getElementById('displayValorInicial').textContent = `R$ ${configDia.valorInicial.toFixed(2)}`;
+      } else {
+        // Se não existe, mostrar R$ 0,00
+        document.getElementById('displayValorInicial').textContent = 'R$ 0,00';
+      }
+    }
+    
+    // Função para obter valor inicial do dia atual
+    function getValorInicialDiaAtual() {
+      const configDia = configsCaixaDia.find(c => c.data === dataVisualizacaoAtual);
+      return configDia ? configDia.valorInicial : 0;
+    }
+    
+    // Botão para editar valor inicial do caixa (por dia)
+    document.getElementById('btnEditarValorInicial').addEventListener('click', () => {
+      const valorAtualDia = getValorInicialDiaAtual();
+      
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 500px; width: 90%;';
+      
+      const dataFormatada = new Date(dataVisualizacaoAtual + 'T12:00:00').toLocaleDateString('pt-BR');
+      
+      modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">💰 Definir Valor Inicial do Caixa</h2>
+          <button id="closeValorInicialModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 2px solid #dee2e6;">
+          <div style="font-size: 13px; color: #666; margin-bottom: 4px; font-weight: 600;">📅 Data Selecionada</div>
+          <div style="font-size: 18px; font-weight: 700; color: #333;">${dataFormatada}</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; color: white; margin-bottom: 24px; text-align: center;">
+          <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Valor Atual deste Dia</div>
+          <div style="font-size: 32px; font-weight: 700;">R$ ${valorAtualDia.toFixed(2)}</div>
+        </div>
+        
+        <form id="formValorInicial">
+          <div style="margin-bottom: 24px;">
+            <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">Novo Valor Inicial para este Dia (R$)</label>
+            <input type="number" id="novoValorInicial" step="0.01" min="0" value="${valorAtualDia}" placeholder="Ex: 100.00" required style="padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 16px; width: 100%; font-weight: 600;">
+          </div>
+          
+          <button type="submit" style="padding: 14px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s;">
+            Salvar Valor Inicial
+          </button>
+        </form>
+      `;
+      
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
+      
+      document.getElementById('closeValorInicialModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
+      
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      });
+      
+      document.getElementById('formValorInicial').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const novoValor = parseFloat(document.getElementById('novoValorInicial').value);
+        
+        // Verificar se já existe configuração de caixa para este dia
+        const configIndex = configsCaixaDia.findIndex(c => c.data === dataVisualizacaoAtual);
+        
+        if (configIndex >= 0) {
+          // Atualizar
+          configsCaixaDia[configIndex].valorInicial = novoValor;
+        } else {
+          // Criar novo
+          configsCaixaDia.push({
+            data: dataVisualizacaoAtual,
+            valorInicial: novoValor
+          });
+        }
+        
+        salvarDados();
+        atualizarDisplayValorInicial();
+        
+        mostrarMensagem(`✅ Valor inicial de ${dataFormatada} atualizado para R$ ${novoValor.toFixed(2)}!`, 'success');
+        modalBackdrop.remove();
+      });
+    });
+    
+    // Funções de navegação por dia
+    function atualizarCalendarioNavegacao() {
+      const dataObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      const hoje = new Date().toISOString().split('T')[0];
+      
+      // Formatar data
+      const dataFormatada = dataObj.toLocaleDateString('pt-BR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      document.getElementById('dataAtualTexto').textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+      
+      // Status do dia
+      let statusTexto = '';
+      if (dataVisualizacaoAtual === hoje) {
+        statusTexto = '🔵 Hoje';
+      } else if (dataVisualizacaoAtual < hoje) {
+        statusTexto = '📅 Dia Anterior';
+      } else {
+        statusTexto = '🔮 Dia Futuro';
+      }
+      document.getElementById('statusDia').textContent = statusTexto;
+      
+      // Desabilitar botão "Próximo Dia" se for hoje ou futuro
+      const btnProximoDia = document.getElementById('btnProximoDia');
+      if (dataVisualizacaoAtual >= hoje) {
+        btnProximoDia.disabled = true;
+        btnProximoDia.style.opacity = '0.5';
+        btnProximoDia.style.cursor = 'not-allowed';
+      } else {
+        btnProximoDia.disabled = false;
+        btnProximoDia.style.opacity = '1';
+        btnProximoDia.style.cursor = 'pointer';
+      }
+      
+      // Atualizar campo de data nos formulários
+      document.getElementById('dataRecebimento').value = dataVisualizacaoAtual;
+      document.getElementById('dataDespesa').value = dataVisualizacaoAtual;
+      
+      // Atualizar valor inicial do caixa para este dia
+      atualizarDisplayValorInicial();
+      
+      // Atualizar resumo do dia
+      atualizarResumoDia();
+    }
+    
+    function atualizarResumoDia() {
+      const recebimentosDia = recebimentos.filter(r => {
+        const dataRec = new Date(r.data).toISOString().split('T')[0];
+        return dataRec === dataVisualizacaoAtual;
+      });
+      
+      const despesasDia = despesas.filter(d => {
+        const dataDes = new Date(d.data).toISOString().split('T')[0];
+        return dataDes === dataVisualizacaoAtual;
+      });
+      
+      const totalRecebidoDia = recebimentosDia.reduce((sum, r) => sum + r.valorBruto, 0);
+      const totalDespesasDia = despesasDia.reduce((sum, d) => sum + d.valor, 0);
+      // Líquido = soma de todos os valorLiquido (que já é o que fica para clínica)
+      const totalLiquidoDia = recebimentosDia.reduce((sum, r) => sum + r.valorLiquido, 0);
+      
+      document.getElementById('resumoDiaRecebimentos').textContent = `R$ ${totalRecebidoDia.toFixed(2)}`;
+      document.getElementById('resumoDiaDespesas').textContent = `R$ ${totalDespesasDia.toFixed(2)}`;
+      document.getElementById('resumoDiaLiquido').textContent = `R$ ${totalLiquidoDia.toFixed(2)}`;
+    }
+    
+    // Botões de navegação
+    document.getElementById('btnDiaAnterior').addEventListener('click', () => {
+      const dataAtual = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      dataAtual.setDate(dataAtual.getDate() - 1);
+      dataVisualizacaoAtual = dataAtual.toISOString().split('T')[0];
+      atualizarCalendarioNavegacao();
+      updateDashboard();
+    });
+    
+    document.getElementById('btnProximoDia').addEventListener('click', () => {
+      const dataAtual = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      dataAtual.setDate(dataAtual.getDate() + 1);
+      dataVisualizacaoAtual = dataAtual.toISOString().split('T')[0];
+      atualizarCalendarioNavegacao();
+      updateDashboard();
+    });
+    
+    document.getElementById('btnHoje').addEventListener('click', () => {
+      dataVisualizacaoAtual = new Date().toISOString().split('T')[0];
+      atualizarCalendarioNavegacao();
+      updateDashboard();
+    });
+    
+    const defaultConfig = {
+      main_title: "Controle Financeiro Centro Médico de Camocim",
+      total_bruto_label: "Total Bruto Recebido",
+      total_liquido_label: "Total Líquido Clínica",
+      add_button_text: "Adicionar Recebimento",
+      background_color: "#f4f4f9",
+      primary_color: "#0056b3",
+      surface_color: "#ffffff",
+      text_color: "#333333",
+      accent_color: "#28a745"
+    };
+
+    async function onConfigChange(config) {
+      const mainTitle = config.main_title || defaultConfig.main_title;
+      const totalBrutoLabel = config.total_bruto_label || defaultConfig.total_bruto_label;
+      const totalLiquidoLabel = config.total_liquido_label || defaultConfig.total_liquido_label;
+      const addButtonText = config.add_button_text || defaultConfig.add_button_text;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+
+      document.getElementById('mainTitle').textContent = mainTitle;
+      document.getElementById('totalBrutoLabel').textContent = totalBrutoLabel;
+      document.getElementById('totalLiquidoLabel').textContent = totalLiquidoLabel;
+      document.getElementById('addButton').textContent = addButtonText;
+
+      const dashboardWrapper = document.querySelector('.dashboard-wrapper');
+      dashboardWrapper.style.background = backgroundColor;
+
+      const mainTitleEl = document.getElementById('mainTitle');
+      mainTitleEl.style.color = primaryColor;
+
+      const allSectionTitles = document.querySelectorAll('.section-title');
+      allSectionTitles.forEach(title => {
+        title.style.color = textColor;
+      });
+
+      const allCards = document.querySelectorAll('.detail-section, .chart-card, .table-container, .form-section');
+      allCards.forEach(card => {
+        card.style.background = surfaceColor;
+      });
+
+      const submitBtn = document.getElementById('addButton');
+      submitBtn.style.background = accentColor;
+
+      const logoPlaceholder = document.querySelector('.logo-placeholder');
+      logoPlaceholder.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${adjustBrightness(primaryColor, 20)} 100%)`;
+    }
+
+    function adjustBrightness(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255))
+        .toString(16).slice(1);
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              window.elementSdk.setConfig({ primary_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["total_bruto_label", config.total_bruto_label || defaultConfig.total_bruto_label],
+        ["total_liquido_label", config.total_liquido_label || defaultConfig.total_liquido_label],
+        ["add_button_text", config.add_button_text || defaultConfig.add_button_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+    
+    // GERENCIAR TIPOS DE ATENDIMENTO
+    document.getElementById('gerenciarAtendimentos').addEventListener('click', () => {
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center; padding: 20px;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 600px; width: 100%; max-height: 90%; overflow-y: auto;';
+      
+      const renderListaTipos = () => {
+        const listaPadrao = `
+          <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 16px; font-weight: 600; color: #666; margin-bottom: 12px;">📋 Tipos Padrão (não podem ser excluídos)</h3>
+            <div style="display: grid; gap: 8px;">
+              <div style="background: #f8f9fa; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: #333;">Consulta</span>
+                <span style="color: #999; font-size: 12px;">Padrão</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: #333;">Procedimento</span>
+                <span style="color: #999; font-size: 12px;">Padrão</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: #333;">Retorno</span>
+                <span style="color: #999; font-size: 12px;">Padrão</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: #333;">Cirurgia</span>
+                <span style="color: #999; font-size: 12px;">Padrão</span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        const listaCustomizada = tiposAtendimento.length > 0 ? `
+          <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 16px; font-weight: 600; color: #667eea; margin-bottom: 12px;">✨ Tipos Customizados</h3>
+            <div style="display: grid; gap: 8px;">
+              ${tiposAtendimento.map(tipo => `
+                <div style="background: linear-gradient(135deg, #e0e7ff 0%, #f0e7ff 100%); padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #c7d2fe;">
+                  <span style="font-weight: 600; color: #333;">${tipo.nome}</span>
+                  <button onclick="removerTipoAtendimento('${tipo.__backendId}')" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.2s;">❌ Excluir</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : '<div style="text-align: center; padding: 20px; color: #999; margin-bottom: 24px;">Nenhum tipo customizado ainda</div>';
+        
+        return listaPadrao + listaCustomizada;
+      };
+      
+      
+      
+      
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      });
+      
+      // Adicionar novo tipo
+      document.getElementById('formNovoTipo').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Adicionando...';
+        
+        const nome = document.getElementById('novoTipoNome').value.trim();
+        
+        if (!nome) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Adicionar';
+          return;
+        }
+        
+        // Gerar valor único baseado no nome (slug)
+        const valor = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '_');
+        
+        const result = await window.dataSdk.create({
+          tipo: 'tipoAtendimento',
+          nome: nome,
+          valor: valor,
+          dataCadastro: new Date().toISOString()
+        });
+        
+        if (result.isOk) {
+          const successDiv = document.createElement('div');
+          successDiv.textContent = `✅ Tipo "${nome}" adicionado com sucesso!`;
+          successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(successDiv);
+          setTimeout(() => successDiv.remove(), 3000);
+          
+          document.getElementById('novoTipoNome').value = '';
+          document.getElementById('listaTiposContainer').innerHTML = renderListaTipos();
+        } else {
+          const errorDiv = document.createElement('div');
+          errorDiv.textContent = '❌ Erro ao adicionar tipo';
+          errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(errorDiv);
+          setTimeout(() => errorDiv.remove(), 3000);
+        }
+        
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Adicionar';
+      });
+      
+      // Função global para remover tipo
+      window.removerTipoAtendimento = async function(backendId) {
+        const tipo = tiposAtendimento.find(t => t.__backendId === backendId);
+        if (!tipo) return;
+        
+        const confirmDiv = document.createElement('div');
+        confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
+        confirmDiv.innerHTML = `
+          <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ Confirmar Exclusão</h3>
+          <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja remover o tipo "${tipo.nome}"?</p>
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <button id="confirmRemoveTipo" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Remover</button>
+            <button id="cancelRemoveTipo" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+          </div>
+        `;
+        
+        const backdrop = document.createElement('div');
+        backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+        
+        document.body.appendChild(backdrop);
+        document.body.appendChild(confirmDiv);
+        
+        document.getElementById('cancelRemoveTipo').addEventListener('click', () => {
+          backdrop.remove();
+          confirmDiv.remove();
+        });
+        
+        document.getElementById('confirmRemoveTipo').addEventListener('click', async () => {
+          const result = await window.dataSdk.delete(tipo);
+          if (result.isOk) {
+            const successDiv = document.createElement('div');
+            successDiv.textContent = '✅ Tipo removido com sucesso!';
+            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+            
+            document.getElementById('listaTiposContainer').innerHTML = renderListaTipos();
+          }
+          backdrop.remove();
+          confirmDiv.remove();
+        });
+      };
+    });
+    
+    // CADASTRO DE PACIENTE - Botão para abrir modal
+    document.getElementById('openPatientModal').addEventListener('click', () => {
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
+      
+      
+      
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
+      
+      document.getElementById('closePatientModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
+      
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      });
+      
+      document.getElementById('patientForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Cadastrando...';
+        
+        const nome = document.getElementById('pacienteNome').value.trim();
+        const telefone = document.getElementById('pacienteTelefone').value.trim();
+        const email = document.getElementById('pacienteEmail').value.trim();
+        const endereco = document.getElementById('pacienteEndereco').value.trim();
+        const dataNascimento = document.getElementById('pacienteDataNascimento').value;
+        
+        if (!nome || !telefone) {
+          const messageDiv = document.createElement('div');
+          messageDiv.textContent = ' Por favor, preencha nome e telefone';
+          messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(messageDiv);
+          setTimeout(() => messageDiv.remove(), 3000);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Paciente';
+          return;
+        }
+        
+        const result = await window.dataSdk.create({
+          tipo: 'paciente',
+          nome: nome,
+          telefone: telefone,
+          email: email,
+          endereco: endereco,
+          dataNascimento: dataNascimento,
+          dataCadastro: new Date().toISOString()
+        });
+        
+        // Dentro do seu Event Listener de submissão:
+submitBtn.addEventListener('click', async (e) => {
+    e.preventDefault(); // Impede o recarregamento da página
+
+
+
+
+    document.getElementById('openPatientModal').addEventListener('click', () => {
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 600px; width: 90%; max-height: 90%; overflow-y: auto;';
+      
+      modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">👤 Cadastrar Novo Paciente</h2>
+          <button id="closePatientModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <form id="patientForm">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label for="pacienteNome" class="form-label">Nome Completo</label>
+              <input type="text" id="pacienteNome" class="form-input" placeholder="Ex: Maria Silva" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="pacienteTelefone" class="form-label">Telefone</label>
+              <input type="tel" id="pacienteTelefone" class="form-input" placeholder="Ex: (88) 99999-9999" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="pacienteEmail" class="form-label">Email (opcional)</label>
+              <input type="email" id="pacienteEmail" class="form-input" placeholder="Ex: maria@email.com">
+            </div>
+            
+            <div class="form-group">
+              <label for="pacienteEndereco" class="form-label">Endereço (opcional)</label>
+              <input type="text" id="pacienteEndereco" class="form-input" placeholder="Ex: Rua das Flores, 123">
+            </div>
+            
+            <button type="submit" class="submit-btn" style="width: 100%; margin-top: 8px;">
+              Cadastrar Paciente
+            </button>
+          </div>
+        </form>
+      `;
+      
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
+      
+      document.getElementById('closePatientModal').addEventListener('click', () => modalBackdrop.remove());
+      
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) modalBackdrop.remove();
+      });
+      
+      document.getElementById('patientForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const nome = document.getElementById('pacienteNome').value.trim();
+        const telefone = document.getElementById('pacienteTelefone').value.trim();
+
+        // 1. Estado de carregamento
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Salvando...';
+        
+        try {
+          // 2. Lógica de Salvamento Local (Usando suas funções existentes)
+          const novoPaciente = {
+            id: Date.now(),
+            nome: nome,
+            telefone: telefone,
+            email: document.getElementById('pacienteEmail').value,
+            endereco: document.getElementById('pacienteEndereco').value,
+            dataCadastro: new Date().toISOString()
+          };
+
+          // Adiciona ao array global do seu sistema
+          pacientes.push(novoPaciente);
+          
+          // Chama a função que já existe no seu teste.html para salvar no navegador
+          salvarDados(); 
+          
+          // 3. Feedback de Sucesso
+          const successDiv = document.createElement('div');
+          successDiv.textContent = `✅ ${nome} cadastrado com sucesso!`;
+          successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(successDiv);
+          setTimeout(() => successDiv.remove(), 3000);
+          
+          modalBackdrop.remove(); // Fecha o modal
+
+        } catch (error) {
+          console.error("Erro ao salvar:", error);
+          alert("Erro ao salvar paciente localmente.");
+        } finally {
+          // 4. SEMPRE reabilita o botão para não travar
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Paciente';
+        }
+      });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const nome = document.getElementById('nome')?.value; // Ajuste o ID conforme seu HTML
+    const telefone = document.getElementById('telefone')?.value;
+
+    // 1. Validação Inicial
+    if (!nome || !telefone) {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = '⚠️ Por favor, preencha nome e telefone';
+        messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(messageDiv);
+        setTimeout(() => messageDiv.remove(), 3000);
+        
+        // Garante que o botão volte se houver erro de validação
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Cadastrar Paciente';
+        return;
+    }
+
+    // Estado de carregamento
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Carregando...';
+
+    try {
+        // 2. Lógica para salvar no LocalStorage
+        const pacientes = JSON.parse(localStorage.getItem('pacientes') || '[]');
+        const novoPaciente = { nome, telefone, data: new Date().toISOString() };
+        pacientes.push(novoPaciente);
+        localStorage.setItem('pacientes', JSON.stringify(pacientes));
+
+        // Simula o objeto de resultado que seu código espera
+        const result = { isOk: true };
+
+        // 3. Feedback de Sucesso
+        if (result.isOk) {
+            const successDiv = document.createElement('div');
+            successDiv.textContent = `✅ ${nome} cadastrado com sucesso!`;
+            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+            
+            // Fechar modal se existir
+            if (typeof modalBackdrop !== 'undefined') modalBackdrop.remove();
+            
+            // Opcional: Limpar campos
+            // form.reset();
+        }
+    } catch (error) {
+        // 4. Tratamento de Erro Crítico
+        console.error("Erro ao salvar:", error);
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = '❌ Erro ao cadastrar paciente';
+        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    } finally {
+        // 5. IMPORTANTE: Reabilita o botão independente de ter dado certo ou errado
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Cadastrar Paciente';
+    }
+});
+      });
+    });
+    
+    // LISTA DE PACIENTES - Botão para abrir modal
+    document.getElementById('openPatientListModal').addEventListener('click', () => {
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center; padding: 20px;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 1000px; width: 100%; max-height: 90%; overflow-y: auto;';
+      
+      const renderListaPacientes = () => {
+        if (pacientes.length === 0) {
+          return '<div style="text-align: center; padding: 40px; color: #999;">Nenhum paciente cadastrado ainda</div>';
+        }
+        
+        return `
+          <div style="display: grid; gap: 16px;">
+            ${pacientes.map(paciente => {
+              const dataNasc = paciente.dataNascimento ? new Date(paciente.dataNascimento).toLocaleDateString('pt-BR') : 'Não informado';
+              return `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid #e9ecef; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">👤</div>
+                  
+                  <div>
+                    <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #333;">${paciente.nome}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 13px; color: #666;">
+                      <div><strong>📞 Telefone:</strong> ${paciente.telefone}</div>
+                      ${paciente.email ? `<div><strong>📧 Email:</strong> ${paciente.email}</div>` : ''}
+                      ${paciente.endereco ? `<div><strong>📍 Endereço:</strong> ${paciente.endereco}</div>` : ''}
+                      <div><strong>🎂 Nascimento:</strong> ${dataNasc}</div>
+                    </div>
+                  </div>
+                  
+                  <button onclick="removerPacienteDB('${paciente.__backendId}')" style="padding: 10px 16px; background: #dc3545; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;">❌ Remover</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      };
+      
+      modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">📋 Lista de Pacientes (${pacientes.length})</h2>
+          
+          
+
+
+          <button id="closePatientListModal" style="background: #e9ecef; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <div id="listaPacientesContainer">
+          ${renderListaPacientes()}
+        </div>
+      `;
+      
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
+      
+      document.getElementById('closePatientListModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
+      
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      });
+      
+      window.removerPacienteDB = async function(backendId) {
+        const paciente = pacientes.find(p => p.__backendId === backendId);
+        if (!paciente) return;
+        
+        const confirmDiv = document.createElement('div');
+        confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
+        confirmDiv.innerHTML = `
+          <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ Confirmar Exclusão</h3>
+          <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja remover ${paciente.nome}?</p>
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <button id="confirmRemovePaciente" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Remover</button>
+            <button id="cancelRemovePaciente" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+          </div>
+        `;
+        
+        const backdrop2 = document.createElement('div');
+        backdrop2.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+        
+        document.body.appendChild(backdrop2);
+        document.body.appendChild(confirmDiv);
+        
+        document.getElementById('cancelRemovePaciente').addEventListener('click', () => {
+          backdrop2.remove();
+          confirmDiv.remove();
+        });
+        
+        document.getElementById('confirmRemovePaciente').addEventListener('click', async () => {
+          const result = await window.dataSdk.delete(paciente);
+          if (result.isOk) {
+            const successDiv = document.createElement('div');
+            successDiv.textContent = '✅ Paciente removido com sucesso!';
+            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+            
+            document.getElementById('listaPacientesContainer').innerHTML = renderListaPacientes();
+            document.querySelector('#closePatientListModal').previousElementSibling.textContent = `📋 Lista de Pacientes (${pacientes.length})`;
+          }
+          backdrop2.remove();
+          confirmDiv.remove();
+        });
+      };
+    });
+    
+    // CADASTRO DE PROFISSIONAL - Botão para abrir modal
+    document.getElementById('openProfessionalModal').addEventListener('click', () => {
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 600px; width: 90%; max-height: 90%; overflow-y: auto;';
+      
+      modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">⚕️ Cadastrar Novo Profissional</h2>
+          <button id="closeProfessionalModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <form id="professionalForm">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label for="profissionalNome" class="form-label">Nome Completo</label>
+              <input type="text" id="profissionalNome" class="form-input" placeholder="Ex: Dr. João Silva" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="profissionalProfissao" class="form-label">Profissão (opcional)</label>
+              <input type="text" id="profissionalProfissao" class="form-input" placeholder="Ex: Cardiologista">
+            </div>
+            
+            <div class="form-group">
+              <label for="profissionalTelefone" class="form-label">Telefone (opcional)</label>
+              <input type="tel" id="profissionalTelefone" class="form-input" placeholder="Ex: (88) 99999-9999">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">O profissional tem porcentagem?</label>
+              <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <button type="button" id="btnPorcentagemSim" style="flex: 1; padding: 12px; background: #e9ecef; color: #666; border: 2px solid #dee2e6; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                  ✅ Sim
+                </button>
+                <button type="button" id="btnPorcentagemNao" style="flex: 1; padding: 12px; background: #e9ecef; color: #666; border: 2px solid #dee2e6; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                  ❌ Não
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group" id="campoPorcentagem" style="display: none;">
+              <label for="profissionalPorcentagem" class="form-label">Porcentagem do Profissional (%)</label>
+              <input type="number" id="profissionalPorcentagem" class="form-input" placeholder="Ex: 80" min="0" max="100">
+              <small style="color: #666; font-size: 12px; margin-top: 4px; display: block;">O resto fica para a clínica</small>
+            </div>
+            
+            <button type="submit" class="submit-btn" style="width: 100%; margin-top: 8px;">
+              Cadastrar Profissional
+            </button>
+          </div>
+        </form>
+      `;
+      
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
+      
+      // Fechar modal ao clicar no X
+      document.getElementById('closeProfessionalModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
+      
+      // Fechar modal ao clicar fora
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      });
+      
+      // Lógica dos botões Sim/Não para porcentagem
+      let temPorcentagem = null;
+      
+      document.getElementById('btnPorcentagemSim').addEventListener('click', () => {
+        temPorcentagem = true;
+        document.getElementById('btnPorcentagemSim').style.background = '#28a745';
+        document.getElementById('btnPorcentagemSim').style.color = 'white';
+        document.getElementById('btnPorcentagemSim').style.borderColor = '#28a745';
+        
+        document.getElementById('btnPorcentagemNao').style.background = '#e9ecef';
+        document.getElementById('btnPorcentagemNao').style.color = '#666';
+        document.getElementById('btnPorcentagemNao').style.borderColor = '#dee2e6';
+        
+        document.getElementById('campoPorcentagem').style.display = 'block';
+      });
+      
+      document.getElementById('btnPorcentagemNao').addEventListener('click', () => {
+        temPorcentagem = false;
+        document.getElementById('btnPorcentagemNao').style.background = '#dc3545';
+        document.getElementById('btnPorcentagemNao').style.color = 'white';
+        document.getElementById('btnPorcentagemNao').style.borderColor = '#dc3545';
+        
+        document.getElementById('btnPorcentagemSim').style.background = '#e9ecef';
+        document.getElementById('btnPorcentagemSim').style.color = '#666';
+        document.getElementById('btnPorcentagemSim').style.borderColor = '#dee2e6';
+        
+        document.getElementById('campoPorcentagem').style.display = 'none';
+        document.getElementById('profissionalPorcentagem').value = '';
+      });
+      
+      // Submeter formulário
+      document.getElementById('professionalForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Cadastrando...';
+        
+        const nome = document.getElementById('profissionalNome').value.trim();
+        const profissao = document.getElementById('profissionalProfissao').value.trim();
+        const telefone = document.getElementById('profissionalTelefone').value.trim();
+        
+        // Validar se escolheu Sim ou Não
+        if (temPorcentagem === null) {
+          mostrarMensagem('⚠️ Por favor, escolha se o profissional tem porcentagem (Sim ou Não)', 'warning');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Profissional';
+          return;
+        }
+        
+        let porcentagem;
+        
+        if (temPorcentagem) {
+          // Se tem porcentagem, validar o campo
+          const porcentagemInput = document.getElementById('profissionalPorcentagem').value;
+          porcentagem = parseInt(porcentagemInput);
+          
+          if (!porcentagemInput || isNaN(porcentagem) || porcentagem < 0 || porcentagem > 100) {
+            mostrarMensagem('⚠️ Por favor, preencha a porcentagem corretamente (0 a 100)', 'warning');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Cadastrar Profissional';
+            return;
+          }
+        } else {
+          // Se não tem porcentagem, o profissional fica com 100%
+          porcentagem = 100;
+        }
+        
+        if (!nome) {
+          mostrarMensagem('⚠️ Por favor, preencha o nome do profissional', 'warning');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Profissional';
+          return;
+        }
+        
+        profissionais.push({
+          id: Date.now().toString(),
+          nome: nome,
+          profissao: profissao,
+          telefone: telefone,
+          porcentagem: porcentagem,
+          dataCadastro: new Date().toISOString()
+        });
+        
+        salvarDados();
+        renderProfissionaisList();
+        updateProfissionalSelect();
+        updateProfissionaisDetalhamento();
+        
+        mostrarMensagem(`✅ ${nome} cadastrado com sucesso!`, 'success');
+        modalBackdrop.remove();
+      });
+    });
+    
+    // Função para atualizar select de tipos de atendimento
+    function atualizarSelectTiposAtendimento() {
+      const select = document.getElementById('tipoAtendimento');
+      const valorAtual = select.value;
+      
+      select.innerHTML = '<option value="">Selecione...</option>';
+      
+      // Adicionar tipos padrão
+      const tiposPadrao = [
+        { valor: 'consulta', nome: 'Consulta' },
+        { valor: 'procedimento', nome: 'Procedimento' },
+        { valor: 'retorno', nome: 'Retorno' },
+        { valor: 'cirurgia', nome: 'Cirurgia' }
+      ];
+      
+      tiposPadrao.forEach(tipo => {
+        const option = document.createElement('option');
+        option.value = tipo.valor;
+        option.textContent = tipo.nome;
+        select.appendChild(option);
+      });
+      
+      // Adicionar tipos customizados
+      tiposAtendimento.forEach(tipo => {
+        const option = document.createElement('option');
+        option.value = tipo.valor;
+        option.textContent = tipo.nome;
+        select.appendChild(option);
+      });
+      
+      // Restaurar valor selecionado se ainda existir
+      if (valorAtual) {
+        select.value = valorAtual;
+      }
+    }
+    
+    // Função para renderizar lista de profissionais
+    function renderProfissionaisList() {
+      const lista = document.getElementById('profissionaisLista');
+      
+      if (profissionais.length === 0) {
+        lista.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #999;">Nenhum profissional cadastrado ainda</div>';
+        updateProfissionalSelect();
+        updateProfissionaisDetalhamento();
+        return;
+      }
+      
+      lista.innerHTML = profissionais.map((prof) => `
+        <div style="background: white; padding: 20px; border-radius: 16px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);"></div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                ⚕️
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 16px; color: #333; margin-bottom: 2px;">${prof.nome}</div>
+                ${prof.profissao ? `<div style="font-size: 12px; color: #666;">📋 ${prof.profissao}</div>` : ''}
+              </div>
+            </div>
+            <button onclick="removerProfissionalDB('${prof.__backendId}')" style="background: #fff; border: 2px solid #e9ecef; color: #dc3545; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700; transition: all 0.2s; display: flex; align-items: center; gap: 4px;" onmouseover="this.style.background='#dc3545'; this.style.color='white'; this.style.borderColor='#dc3545';" onmouseout="this.style.background='#fff'; this.style.color='#dc3545'; this.style.borderColor='#e9ecef';">
+              <span>❌</span> Remover
+            </button>
+          </div>
+          
+          <div style="border-top: 1px solid #f0f0f0; padding-top: 12px; margin-top: 12px;">
+            ${prof.telefone ? `
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 14px;">📞</span>
+                <span style="font-size: 13px; color: #666;">${prof.telefone}</span>
+              </div>
+            ` : ''}
+            
+            <div style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 10px 14px; border-radius: 8px; margin-top: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Percentual</span>
+              <span style="font-size: 18px; font-weight: 700; color: #667eea;">${prof.porcentagem}%</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      updateProfissionalSelect();
+      updateProfissionaisDetalhamento();
+    }
+
+    function updateProfissionalSelect() {
+      const select = document.getElementById('profissional');
+      select.innerHTML = '<option value="">Selecione...</option>' + 
+        profissionais.map((prof, index) => `<option value="${index}">${prof.nome}</option>`).join('');
+    }
+
+    function updateProfissionaisDetalhamento() {
+      const container = document.getElementById('profissionaisDetalhamento');
+      
+      if (profissionais.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">📊 Cadastre profissionais para ver o detalhamento aqui</div>';
+        return;
+      }
+      
+      // Filtrar recebimentos do dia selecionado
+      const recebimentosDia = recebimentos.filter(r => {
+        const dataRec = new Date(r.data).toISOString().split('T')[0];
+        return dataRec === dataVisualizacaoAtual;
+      });
+      
+      if (recebimentosDia.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">📊 Nenhum recebimento registrado neste dia</div>';
+        return;
+      }
+      
+      // Criar cards COMPACTOS clicáveis para cada profissional
+      container.innerHTML = profissionais.map((prof, index) => {
+        const recebimentosProf = recebimentosDia.filter(r => r.profissionalIndex === index);
+        
+        if (recebimentosProf.length === 0) {
+          return ''; // Não mostrar profissionais sem atendimentos no dia
+        }
+        
+        const totalBrutoProf = recebimentosProf.reduce((sum, r) => sum + r.valorBruto, 0);
+        const totalProfissional = recebimentosProf.reduce((sum, r) => sum + r.valorProfissional, 0);
+        const totalClinica = recebimentosProf.reduce((sum, r) => sum + r.valorLiquido, 0);
+        
+        return `
+          <div onclick="abrirDetalhamentoProfissional(${index})" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #667eea; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">⚕️</div>
+              <div style="flex: 1;">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #333;">${prof.nome}</h3>
+                <div style="font-size: 12px; color: #666; margin-top: 2px;">
+                  ${recebimentosProf.length} ${recebimentosProf.length === 1 ? 'atendimento' : 'atendimentos'} • ${prof.porcentagem}%
+                </div>
+              </div>
+              <div style="font-size: 20px; color: #667eea;">👁️</div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+              <div style="text-align: center;">
+                <div style="font-size: 10px; color: #666; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Bruto</div>
+                <div style="font-size: 14px; font-weight: 700; color: #333;">R$ ${totalBrutoProf.toFixed(2)}</div>
+              </div>
+              
+              <div style="text-align: center; border-left: 1px solid #e9ecef; border-right: 1px solid #e9ecef;">
+                <div style="font-size: 10px; color: #667eea; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Profissional</div>
+                <div style="font-size: 14px; font-weight: 700; color: #667eea;">R$ ${totalProfissional.toFixed(2)}</div>
+              </div>
+              
+              <div style="text-align: center;">
+                <div style="font-size: 10px; color: #28a745; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Clínica</div>
+                <div style="font-size: 14px; font-weight: 700; color: #28a745;">R$ ${totalClinica.toFixed(2)}</div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 12px; text-align: center; font-size: 11px; color: #667eea; font-weight: 600;">
+              Clique para ver detalhes completos →
+            </div>
+          </div>
+        `;
+      }).filter(card => card !== '').join('');
+      
+      // Se nenhum profissional teve atendimentos
+      if (container.innerHTML === '') {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">📊 Nenhum atendimento registrado neste dia</div>';
+      }
+    }
+    
+    // Função para abrir o modal com detalhamento completo
+    window.abrirDetalhamentoProfissional = function(profIndex) {
+      const prof = profissionais[profIndex];
+      
+      // Filtrar recebimentos do dia selecionado
+      const recebimentosDia = recebimentos.filter(r => {
+        const dataRec = new Date(r.data).toISOString().split('T')[0];
+        return dataRec === dataVisualizacaoAtual;
+      });
+      
+      const recebimentosProf = recebimentosDia.filter(r => r.profissionalIndex === profIndex);
+      
+      // Totais por forma de pagamento
+      const totaisPagamento = {
+        pix: 0,
+        dinheiro: 0,
+        cartao: 0,
+        unimed: 0
+      };
+      
+      recebimentosProf.forEach(r => {
+        if (totaisPagamento.hasOwnProperty(r.formaPagamento)) {
+          totaisPagamento[r.formaPagamento] += r.valorBruto;
+        }
+      });
+      
+      const totalBrutoProf = recebimentosProf.reduce((sum, r) => sum + r.valorBruto, 0);
+      const totalProfissional = recebimentosProf.reduce((sum, r) => sum + r.valorProfissional, 0);
+      const totalClinica = recebimentosProf.reduce((sum, r) => sum + r.valorLiquido, 0);
+      
+      const modalConteudo = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">📊 Detalhamento Completo</h2>
+          <button onclick="fecharDetalhamentoProfissional()" style="background: #e9ecef; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <!-- Cabeçalho do Profissional -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 56px; height: 56px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">⚕️</div>
+            <div>
+              <h3 style="margin: 0; font-size: 24px; font-weight: 700;">${prof.nome}</h3>
+              <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+                ${recebimentosProf.length} ${recebimentosProf.length === 1 ? 'atendimento' : 'atendimentos'} • Percentual: ${prof.porcentagem}%
+              </div>
+            </div>
+          </div>
+          
+          <div style="text-align: right;">
+            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 4px;">Total Líquido Profissional</div>
+            <div style="font-size: 32px; font-weight: 700;">R$ ${totalProfissional.toFixed(2)}</div>
+          </div>
+        </div>
+        
+        <!-- Resumo por Forma de Pagamento -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px;">
+          <div style="background: linear-gradient(135deg, #4bc0c0 0%, #7dd3d3 100%); padding: 16px; border-radius: 12px;">
+            <div style="font-size: 11px; color: white; opacity: 0.9; margin-bottom: 6px; font-weight: 600;">💳 PIX</div>
+            <div style="font-size: 20px; font-weight: 700; color: white;">R$ ${totaisPagamento.pix.toFixed(2)}</div>
+          </div>
+          
+          <div style="background: linear-gradient(135deg, #ffcd56 0%, #ffe082 100%); padding: 16px; border-radius: 12px;">
+            <div style="font-size: 11px; color: #333; opacity: 0.8; margin-bottom: 6px; font-weight: 600;">💵 DINHEIRO</div>
+            <div style="font-size: 20px; font-weight: 700; color: #333;">R$ ${totaisPagamento.dinheiro.toFixed(2)}</div>
+          </div>
+          
+          <div style="background: linear-gradient(135deg, #ff6384 0%, #ff8fa3 100%); padding: 16px; border-radius: 12px;">
+            <div style="font-size: 11px; color: white; opacity: 0.9; margin-bottom: 6px; font-weight: 600;">💳 CARTÃO</div>
+            <div style="font-size: 20px; font-weight: 700; color: white;">R$ ${totaisPagamento.cartao.toFixed(2)}</div>
+          </div>
+          
+          <div style="background: linear-gradient(135deg, #9966ff 0%, #b794ff 100%); padding: 16px; border-radius: 12px;">
+            <div style="font-size: 11px; color: white; opacity: 0.9; margin-bottom: 6px; font-weight: 600;">🏥 UNIMED</div>
+            <div style="font-size: 20px; font-weight: 700; color: white;">R$ ${totaisPagamento.unimed.toFixed(2)}</div>
+          </div>
+        </div>
+        
+        <!-- Divisão Financeira -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">💰 Total Bruto</div>
+            <div style="font-size: 24px; font-weight: 700; color: #333;">R$ ${totalBrutoProf.toFixed(2)}</div>
+          </div>
+          
+          <div style="text-align: center; border-left: 2px solid #dee2e6; border-right: 2px solid #dee2e6;">
+            <div style="font-size: 12px; color: #667eea; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">⚕️ Profissional (${prof.porcentagem}%)</div>
+            <div style="font-size: 24px; font-weight: 700; color: #667eea;">R$ ${totalProfissional.toFixed(2)}</div>
+          </div>
+          
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: #28a745; margin-bottom: 8px; text-transform: uppercase; font-weight: 600;">🏥 Clínica (${100 - prof.porcentagem}%)</div>
+            <div style="font-size: 24px; font-weight: 700; color: #28a745;">R$ ${totalClinica.toFixed(2)}</div>
+          </div>
+        </div>
+        
+        <!-- Lista Detalhada de Atendimentos -->
+        <div style="margin-top: 24px;">
+          <h4 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 0.5px;">📋 Atendimentos Realizados</h4>
+          <div style="display: grid; gap: 12px; max-height: 500px; overflow-y: auto; padding-right: 8px;">
+            ${recebimentosProf.map((rec, idx) => {
+              const dataRec = new Date(rec.data);
+              const hora = dataRec.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+              
+              const iconePagamento = {
+                'pix': '💳',
+                'dinheiro': '💵',
+                'cartao': '💳',
+                'unimed': '🏥'
+              };
+              
+              const corPagamento = {
+                'pix': '#4bc0c0',
+                'dinheiro': '#ffcd56',
+                'cartao': '#ff6384',
+                'unimed': '#9966ff'
+              };
+              
+              return `
+                <div style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8f9fa'}; padding: 16px; border-radius: 10px; border: 1px solid #e9ecef; display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 16px; align-items: center;">
+                  <div style="text-align: center; min-width: 60px;">
+                    <div style="background: #667eea; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; margin: 0 auto 4px;">${idx + 1}</div>
+                    <div style="font-size: 11px; color: #666; font-weight: 600;">🕐 ${hora}</div>
+                  </div>
+                  
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 4px;">${formatarTipoAtendimento(rec.tipoAtendimento)}</div>
+                    <div style="font-size: 12px; color: #666;">
+                      <span style="display: inline-flex; align-items: center; gap: 4px; background: ${corPagamento[rec.formaPagamento]}20; color: ${corPagamento[rec.formaPagamento]}; padding: 4px 10px; border-radius: 6px; font-weight: 600;">
+                        ${iconePagamento[rec.formaPagamento]} ${rec.formaPagamento.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div style="text-align: right; min-width: 100px;">
+                    <div style="font-size: 10px; color: #666; margin-bottom: 2px;">Bruto</div>
+                    <div style="font-size: 17px; font-weight: 700; color: #333;">R$ ${rec.valorBruto.toFixed(2)}</div>
+                  </div>
+                  
+                  <div style="text-align: right; min-width: 100px; background: #667eea10; padding: 10px 14px; border-radius: 8px;">
+                    <div style="font-size: 10px; color: #667eea; margin-bottom: 2px; font-weight: 600;">Profissional</div>
+                    <div style="font-size: 17px; font-weight: 700; color: #667eea;">R$ ${rec.valorProfissional.toFixed(2)}</div>
+                  </div>
+                  
+                  <div style="text-align: right; min-width: 100px; background: #28a74510; padding: 10px 14px; border-radius: 8px;">
+                    <div style="font-size: 10px; color: #28a745; margin-bottom: 2px; font-weight: 600;">Clínica</div>
+                    <div style="font-size: 17px; font-weight: 700; color: #28a745;">R$ ${rec.valorLiquido.toFixed(2)}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('modalDetalhamentoConteudo').innerHTML = modalConteudo;
+      document.getElementById('modalDetalhamentoProfissional').style.display = 'block';
+    };
+    
+    window.fecharDetalhamentoProfissional = function() {
+      document.getElementById('modalDetalhamentoProfissional').style.display = 'none';
+    };
+    
+    // Fechar modal ao clicar fora
+    document.getElementById('modalDetalhamentoProfissional').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modalDetalhamentoProfissional')) {
+        fecharDetalhamentoProfissional();
+      }
+    });
+
+    window.removerProfissionalDB = async function(backendId) {
+      const profissional = profissionais.find(p => p.__backendId === backendId);
+      if (!profissional) return;
+      
+      const confirmDiv = document.createElement('div');
+      confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2000; text-align: center;';
+      confirmDiv.innerHTML = `
+        <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ Confirmar Exclusão</h3>
+        <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja remover ${profissional.nome}?</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="confirmRemoveProf" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Remover</button>
+          <button id="cancelRemoveProf" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+        </div>
+      `;
+      
+      const backdrop = document.createElement('div');
+      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999;';
+      
+      document.body.appendChild(backdrop);
+      document.body.appendChild(confirmDiv);
+      
+      document.getElementById('cancelRemoveProf').addEventListener('click', () => {
+        backdrop.remove();
+        confirmDiv.remove();
+      });
+      
+      document.getElementById('confirmRemoveProf').addEventListener('click', async () => {
+        const result = await window.dataSdk.delete(profissional);
+        if (result.isOk) {
+          const successDiv = document.createElement('div');
+          successDiv.textContent = '✅ Profissional removido com sucesso!';
+          successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;';
+          document.body.appendChild(successDiv);
+          setTimeout(() => successDiv.remove(), 3000);
+        }
+        backdrop.remove();
+        confirmDiv.remove();
+      });
+    };
+
+    // Handlers de Tabs
+    document.getElementById('tabRecebimento').addEventListener('click', () => {
+      document.getElementById('tabRecebimento').style.background = '#28a745';
+      document.getElementById('tabRecebimento').style.color = 'white';
+      document.getElementById('tabDespesa').style.background = '#e9ecef';
+      document.getElementById('tabDespesa').style.color = '#666';
+      document.getElementById('formRecebimento').style.display = 'block';
+      document.getElementById('formDespesa').style.display = 'none';
+    });
+
+    document.getElementById('tabDespesa').addEventListener('click', () => {
+      document.getElementById('tabDespesa').style.background = '#dc3545';
+      document.getElementById('tabDespesa').style.color = 'white';
+      document.getElementById('tabRecebimento').style.background = '#e9ecef';
+      document.getElementById('tabRecebimento').style.color = '#666';
+      document.getElementById('formDespesa').style.display = 'block';
+      document.getElementById('formRecebimento').style.display = 'none';
+    });
+
+    // Handler de formulário de despesas
+    document.getElementById('despesaForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Salvando...';
+      
+      const valorDespesaStr = document.getElementById('valorDespesa').value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+      const valorDespesa = parseFloat(valorDespesaStr);
+      const categoriaDespesa = document.getElementById('categoriaDespesa').value;
+      const descricaoDespesa = document.getElementById('descricaoDespesa').value.trim();
+      const formaPagamentoDespesa = document.getElementById('formaPagamentoDespesa').value;
+      const dataDespesa = document.getElementById('dataDespesa').value;
+      
+      if (!valorDespesa || !categoriaDespesa || !descricaoDespesa || !formaPagamentoDespesa || !dataDespesa) {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = 'Por favor, preencha todos os campos';
+        messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;';
+        document.body.appendChild(messageDiv);
+        setTimeout(() => messageDiv.remove(), 3000);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Adicionar Despesa';
+        return;
+      }
+      
+      const result = await window.dataSdk.create({
+        tipo: 'despesa',
+        valor: valorDespesa,
+        categoria: categoriaDespesa,
+        descricao: descricaoDespesa,
+        formaPagamento: formaPagamentoDespesa,
+        data: new Date(dataDespesa + 'T' + new Date().toTimeString().slice(0, 5)).toISOString()
+      });
+      
+      if (result.isOk) {
+        const successDiv = document.createElement('div');
+        successDiv.textContent = `✅ Despesa de R$ ${valorDespesa.toFixed(2)} adicionada!`;
+        successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;';
+        document.body.appendChild(successDiv);
+        setTimeout(() => successDiv.remove(), 3000);
+        
+        const dataAtual = document.getElementById('dataDespesa').value;
+        document.getElementById('despesaForm').reset();
+        document.getElementById('dataDespesa').value = dataAtual;
+      } else {
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = '❌ Erro ao salvar despesa';
+        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;';
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Adicionar Despesa';
+    });
+
+    function updateDashboard() {
+      // Obter mês e ano da data de visualização atual
+      const dataVizObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      const mesAtual = dataVizObj.getMonth();
+      const anoAtual = dataVizObj.getFullYear();
+      
+      // Filtrar recebimentos de TODO O MÊS (do dia 1 até o último dia)
+      const recebimentosMesCompleto = recebimentos.filter(r => {
+        const dataRec = new Date(r.data);
+        const mesRec = dataRec.getMonth();
+        const anoRec = dataRec.getFullYear();
+        
+        // Mesmo mês e ano (independente do dia)
+        return anoRec === anoAtual && mesRec === mesAtual;
+      });
+      
+      // Calcular totais do MÊS COMPLETO
+      const totalBrutoMes = recebimentosMesCompleto.reduce((sum, r) => sum + r.valorBruto, 0);
+      const totalLiquidoMes = recebimentosMesCompleto.reduce((sum, r) => sum + r.valorLiquido, 0);
+      
+      // Atualizar cards de resumo com valores DO MÊS COMPLETO
+      document.querySelectorAll('.summary-card.bruto .summary-value')[0].textContent = `R$ ${totalBrutoMes.toFixed(2)}`;
+      document.querySelectorAll('.summary-card.liquido .summary-value')[0].textContent = `R$ ${totalLiquidoMes.toFixed(2)}`;
+      
+      // Detalhamento por forma de pagamento (também do mês completo)
+      const detailCards = document.querySelectorAll('.detail-section .detail-card');
+      const totaisPagamento = {
+        cartao: 0,
+        pix: 0,
+        dinheiro: 0,
+        unimed: 0
+      };
+      
+      recebimentosMesCompleto.forEach(r => {
+        if (totaisPagamento.hasOwnProperty(r.formaPagamento)) {
+          totaisPagamento[r.formaPagamento] += r.valorBruto;
+        }
+      });
+      
+      detailCards[0].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.cartao.toFixed(2)}`;
+      detailCards[1].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.pix.toFixed(2)}`;
+      detailCards[2].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.dinheiro.toFixed(2)}`;
+      detailCards[3].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.unimed.toFixed(2)}`;
+      
+      updateProfissionaisDetalhamento();
+      updateTable();
+      renderChartPagamento();
+      renderChartProfissional();
+    }
+
+    function updateTable() {
+      const tbody = document.querySelector('.data-table tbody');
+      
+      // Filtrar recebimentos do dia selecionado
+      const recebimentosDia = recebimentos.filter(r => {
+        const dataRec = new Date(r.data).toISOString().split('T')[0];
+        return dataRec === dataVisualizacaoAtual;
+      });
+      
+      if (recebimentosDia.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #999;"> Nenhum recebimento registrado para este dia</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = recebimentosDia.map((rec) => `
+        <tr>
+          <td>${new Date(rec.data).toLocaleDateString('pt-BR')}</td>
+          <td>${new Date(rec.data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</td>
+          <td>${rec.profissionalNome}</td>
+          <td>R$ ${rec.valorBruto.toFixed(2)}</td>
+          <td>${rec.tipoAtendimento}</td>
+          <td>${rec.formaPagamento}</td>
+          <td style="color: #dc3545; font-weight: 600;">R$ ${rec.valorProfissional.toFixed(2)}</td>
+          <td class="value-liquido">R$ ${rec.valorLiquido.toFixed(2)}</td>
+          <td><button class="action-btn" onclick="removerRecebimento('${rec.id}')">Excluir</button></td>
+        </tr>
+      `).join('');
+    }
+
+    window.removerRecebimento = function(id) {
+      const index = recebimentos.findIndex(r => r.id === id);
+      if (index === -1) return;
+      
+      const recebimento = recebimentos[index];
+      
+      const confirmDiv = document.createElement('div');
+      confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
+      confirmDiv.innerHTML = `
+        <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ Confirmar Exclusão</h3>
+        <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja excluir este recebimento de R$ ${recebimento.valorBruto.toFixed(2)}?</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="confirmRemove" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Excluir</button>
+          <button id="cancelRemove" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+        </div>
+      `;
+      
+      const backdrop = document.createElement('div');
+      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
+      
+      document.body.appendChild(backdrop);
+      document.body.appendChild(confirmDiv);
+      
+      document.getElementById('cancelRemove').addEventListener('click', () => {
+        backdrop.remove();
+        confirmDiv.remove();
+      });
+      
+      document.getElementById('confirmRemove').addEventListener('click', () => {
+        recebimentos.splice(index, 1);
+        salvarDados();
+        updateDashboard();
+        mostrarMensagem('🗑️ Recebimento excluído!', 'success');
+        backdrop.remove();
+        confirmDiv.remove();
+      });
+    };
+
+    document.getElementById('receiptForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('addButton');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Salvando...';
+      
+      const valorBrutoStr = document.getElementById('valorBruto').value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+      const valorBruto = parseFloat(valorBrutoStr);
+      const profissionalIndex = parseInt(document.getElementById('profissional').value);
+      const tipoAtendimento = document.getElementById('tipoAtendimento').value;
+      const formaPagamento = document.getElementById('formaPagamento').value;
+      const dataRecebimento = document.getElementById('dataRecebimento').value;
+      
+      if (!valorBruto || isNaN(profissionalIndex) || !tipoAtendimento || !formaPagamento || !dataRecebimento) {
+        mostrarMensagem('⚠️ Por favor, preencha todos os campos', 'warning');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Adicionar Recebimento';
+        return;
+      }
+      
+      const prof = profissionais[profissionalIndex];
+      
+      // Se o profissional tem 100% (não tem porcentagem configurada), o valor líquido vai TODO para a clínica
+      // Se o profissional tem menos de 100%, calcular normalmente
+      let valorProfissional, valorLiquido;
+      
+      if (prof.porcentagem === 100) {
+        // Profissional não recebe nada (0%), clínica fica com tudo (100%)
+        valorProfissional = 0;
+        valorLiquido = valorBruto;
+      } else {
+        // Profissional recebe sua porcentagem, clínica recebe o resto
+        valorProfissional = valorBruto * (prof.porcentagem / 100);
+        valorLiquido = valorBruto - valorProfissional;
+      }
+      
+      // Adicionar recebimento ao array local
+      recebimentos.push({
+        id: Date.now().toString(),
+        valorBruto: valorBruto,
+        valorLiquido: valorLiquido,
+        valorProfissional: valorProfissional,
+        profissionalIndex: profissionalIndex,
+        profissionalNome: prof.nome,
+        tipoAtendimento: tipoAtendimento,
+        formaPagamento: formaPagamento,
+        data: new Date(dataRecebimento + 'T' + new Date().toTimeString().slice(0, 5)).toISOString()
+      });
+      
+      // Salvar no localStorage
+      salvarDados();
+      
+      // Atualizar interface
+      updateDashboard();
+      
+      mostrarMensagem(`✅ Recebimento de R$ ${valorBruto.toFixed(2)} para ${prof.nome} adicionado!`, 'success');
+      
+      const dataAtual = document.getElementById('dataRecebimento').value;
+      document.getElementById('receiptForm').reset();
+      document.getElementById('dataRecebimento').value = dataAtual;
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Adicionar Recebimento';
+    });
+
+    // Função para renderizar gráfico de pizza (Pagamento) - MÊS COMPLETO
+    function renderChartPagamento() {
+      const container = document.getElementById('chartPagamento');
+      
+      // Obter mês e ano da data de visualização atual
+      const dataVizObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      const mesAtual = dataVizObj.getMonth();
+      const anoAtual = dataVizObj.getFullYear();
+      
+      // Filtrar recebimentos de TODO O MÊS
+      const recebimentosMes = recebimentos.filter(r => {
+        const dataRec = new Date(r.data);
+        const mesRec = dataRec.getMonth();
+        const anoRec = dataRec.getFullYear();
+        return anoRec === anoAtual && mesRec === mesAtual;
+      });
+      
+      if (recebimentosMes.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; font-size: 16px;"> Nenhum recebimento neste mês</div>';
+        return;
+      }
+      
+      const totaisPagamento = {
+        'dinheiro': { label: 'Dinheiro', valor: 0, color: '#ffcd56' },
+        'cartao': { label: 'Cartão', valor: 0, color: '#ff6384' },
+        'pix': { label: 'PIX', valor: 0, color: '#4bc0c0' },
+        'outros': { label: 'Outros/Unimed', valor: 0, color: '#9966ff' }
+      };
+      
+      recebimentosMes.forEach(r => {
+        if (r.formaPagamento === 'dinheiro' || r.formaPagamento === 'cartao' || r.formaPagamento === 'pix') {
+          totaisPagamento[r.formaPagamento].valor += r.valorBruto;
+        } else {
+          // Unimed e outras formas vão para "outros"
+          totaisPagamento['outros'].valor += r.valorBruto;
+        }
+      });
+      
+      const totalGeral = Object.values(totaisPagamento).reduce((sum, p) => sum + p.valor, 0);
+      
+      // Criar SVG com gráfico de pizza
+      let currentAngle = -90;
+      const radius = 90;
+      const centerX = 110;
+      const centerY = 110;
+      
+      const fatias = Object.entries(totaisPagamento)
+        .filter(([_, data]) => data.valor > 0)
+        .map(([key, data]) => {
+          const percentual = (data.valor / totalGeral) * 100;
+          const angle = (percentual / 100) * 360;
+          const startAngle = currentAngle;
+          const endAngle = currentAngle + angle;
+          
+          const startRad = (startAngle * Math.PI) / 180;
+          const endRad = (endAngle * Math.PI) / 180;
+          
+          const x1 = centerX + radius * Math.cos(startRad);
+          const y1 = centerY + radius * Math.sin(startRad);
+          const x2 = centerX + radius * Math.cos(endRad);
+          const y2 = centerY + radius * Math.sin(endRad);
+          
+          const largeArc = angle > 180 ? 1 : 0;
+          
+          const path = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+          
+          currentAngle = endAngle;
+          
+          return { ...data, percentual, path, key };
+        });
+      
+      container.innerHTML = `
+        <div style="padding: 20px;">
+          <!-- Legenda no topo -->
+          <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap;">
+            ${fatias.map(fatia => `
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 16px; height: 16px; background: ${fatia.color}; border-radius: 3px;"></div>
+                <span style="font-size: 13px; font-weight: 600; color: #333; font-family: 'Roboto', 'Open Sans', sans-serif;">${fatia.label}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <!-- Gráfico de Pizza centralizado -->
+          <div style="display: flex; justify-content: center;">
+            <svg width="220" height="220" viewBox="0 0 220 220" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));">
+              ${fatias.map(fatia => `
+                <path d="${fatia.path}" fill="${fatia.color}" stroke="white" stroke-width="3">
+                  <title>${fatia.label}: R$ ${fatia.valor.toFixed(2)} (${fatia.percentual.toFixed(1)}%)</title>
+                </path>
+              `).join('')}
+            </svg>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Função para renderizar gráfico de barras horizontais (Tipo de Atendimento) - MÊS COMPLETO
+    function renderChartProfissional() {
+      const container = document.getElementById('chartProfissional');
+      
+      // Obter mês e ano da data de visualizão atual
+      const dataVizObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
+      const mesAtual = dataVizObj.getMonth();
+      const anoAtual = dataVizObj.getFullYear();
+      
+      // Filtrar recebimentos de TODO O MÊS
+      const recebimentosMes = recebimentos.filter(r => {
+        const dataRec = new Date(r.data);
+        const mesRec = dataRec.getMonth();
+        const anoRec = dataRec.getFullYear();
+        return anoRec === anoAtual && mesRec === mesAtual;
+      });
+      
+      if (recebimentosMes.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; font-size: 16px;">📊 Nenhum recebimento neste mês</div>';
+        return;
+      }
+      
+      // Agrupar por tipo de atendimento - usar valorBruto (total recebido já com desconto incluído no valor)
+      const totaisPorAtendimento = {};
+      recebimentosMes.forEach(r => {
+        const tipoFormatado = formatarTipoAtendimento(r.tipoAtendimento);
+        if (!totaisPorAtendimento[tipoFormatado]) {
+          totaisPorAtendimento[tipoFormatado] = 0;
+        }
+        totaisPorAtendimento[tipoFormatado] += r.valorBruto;
+      });
+      
+      const dados = Object.entries(totaisPorAtendimento)
+        .map(([tipo, valor]) => ({ tipo, valor }))
+        .sort((a, b) => b.valor - a.valor);
+      
+      const maxValue = Math.max(...dados.map(d => d.valor));
+      
+      // Calcular escala do eixo X
+      const maxEixo = Math.ceil(maxValue / 100) * 100;
+      const numTicks = 6;
+      const tickInterval = maxEixo / (numTicks - 1);
+      const ticks = Array.from({ length: numTicks }, (_, i) => i * tickInterval);
+      
+      container.innerHTML = `
+        <div style="padding: 20px;">
+          <!-- Legenda no topo -->
+          <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 16px; height: 16px; background: #36a2eb; border-radius: 3px;"></div>
+              <span style="font-size: 13px; font-weight: 600; color: #333; font-family: 'Roboto', 'Open Sans', sans-serif;">Valor Total Recebido (R$)</span>
+            </div>
+          </div>
+          
+          <!-- Gráfico de Barras -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            ${dados.map(d => {
+              const width = maxEixo > 0 ? (d.valor / maxEixo) * 100 : 0;
+              return `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <!-- Nome do Tipo à esquerda -->
+                  <div style="min-width: 120px; text-align: right;">
+                    <span style="font-size: 12px; font-weight: 600; color: #333; font-family: 'Roboto', 'Open Sans', sans-serif;">${d.tipo}</span>
+                  </div>
+                  
+                  <!-- Barra com valor -->
+                  <div style="flex: 1; height: 32px; background: #f5f5f5; border-radius: 4px; position: relative; overflow: visible; display: flex; align-items: center;">
+                    <div style="height: 100%; width: ${width}%; background: #36a2eb; border-radius: 4px; transition: all 0.5s ease; box-shadow: 0 2px 6px rgba(54, 162, 235, 0.3);"></div>
+                    <span style="position: absolute; left: calc(${width}% + 8px); font-size: 13px; font-weight: 700; color: #333; font-family: 'Roboto', 'Open Sans', sans-serif; white-space: nowrap;">R$ ${d.valor.toFixed(2)}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+            
+            <!-- Eixo X (Valores) alinhado com as barras -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="min-width: 120px;"></div>
+              <div style="flex: 1; display: flex; justify-content: space-between; padding-top: 8px; border-top: 2px solid #e0e0e0;">
+                ${ticks.map(tick => `
+                  <span style="font-size: 11px; font-weight: 500; color: #666; font-family: 'Roboto', 'Open Sans', sans-serif;">${tick}</span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Função para formatar nome do tipo de atendimento
+    function formatarTipoAtendimento(tipo) {
+      const formatacao = {
+        'consulta': 'Consulta',
+        'procedimento': 'Procedimento',
+        'retorno': 'Retorno',
+        'cirurgia': 'Cirurgia'
+      };
+      return formatacao[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1);
+    }
+
+    // Máscaras de input
+    document.getElementById('valorBruto').addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      value = (value / 100).toFixed(2);
+      e.target.value = 'R$ ' + value.replace('.', ',');
+    });
+
+    document.getElementById('valorDespesa').addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      value = (value / 100).toFixed(2);
+      e.target.value = 'R$ ' + value.replace('.', ',');
+    });
+    
+
+    
+    // TODO: Adicionar restante das funcionalidades (pacientes, export, etc)
+
+// ==========================================
+// SISTEMA DE GERENCIAMENTO DE ATENDIMENTOS
+// ==========================================
+
+document.getElementById('gerenciarAtendimentos').onclick = function(e) {
+    e.preventDefault();
+    
+    // Inicia com valores padrão se estiver vazio
+    if (!tiposAtendimento || tiposAtendimento.length === 0) {
+        tiposAtendimento = ['Consulta', 'Procedimento', 'Retorno', 'Cirurgia'];
+        salvarDados();
+    }
+
+    const modalGerenciarHTML = `
+        <div id="modalGerenciarTipos" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 6000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+            <div style="background: white; padding: 25px; border-radius: 15px; width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: #333; font-weight: 700;">⚙️ Gerenciar Atendimentos</h3>
+                    <button type="button" onclick="document.getElementById('modalGerenciarTipos').remove()" style="cursor: pointer; background: none; border: none; font-size: 24px; color: #999;">&times;</button>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                    <input type="text" id="inputNovoTipo" placeholder="Novo tipo..." style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    <button type="button" id="btnConfirmarAdd" style="background: #28a745; color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer;">Add</button>
+                </div>
+
+                <div id="listaItensTipos" style="max-height: 200px; overflow-y: auto;">
+                    ${tiposAtendimento.map((tipo, i) => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <span style="font-size: 14px;">${tipo}</span>
+                            <button type="button" onclick="removerTipoAtendimento(${i})" style="color: #dc3545; background: none; border: none; cursor: pointer;">Excluir</button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalGerenciarHTML);
+
+    document.getElementById('btnConfirmarAdd').onclick = function() {
+        const nome = document.getElementById('inputNovoTipo').value.trim();
+        if (nome) {
+            tiposAtendimento.push(nome);
+            salvarDados(); // Grava no localStorage local
+            atualizarSelectPrincipal();
+            document.getElementById('modalGerenciarTipos').remove();
+            document.getElementById('gerenciarAtendimentos').click();
+        }
+    };
+};
+
+function removerTipoAtendimento(index) {
+    if (confirm('Deseja excluir?')) {
+        tiposAtendimento.splice(index, 1);
+        salvarDados(); 
+        atualizarSelectPrincipal();
+        document.getElementById('modalGerenciarTipos').remove();
+        document.getElementById('gerenciarAtendimentos').click();
+    }
+}
+
+function atualizarSelectPrincipal() {
+    const select = document.getElementById('tipoAtendimento');
+    if (!select) return;
+    const selecionado = select.value;
+    select.innerHTML = '<option value="">Selecione...</option>';
+    tiposAtendimento.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.toLowerCase();
+        opt.textContent = t;
+        select.appendChild(opt);
+    });
+    select.value = selecionado;
+}
+
+// Para o formulário de Recebimento
+function resetFormularioRecebimento() {
+    document.getElementById('formRecebimento').reset();
+    // Esta linha abaixo garante que pegue a data correta do Brasil
+    const hojeBrasil = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
+    document.getElementById('dataRecebimento').value = hojeBrasil;
+}
+
+// Para o formulário de Despesa
+function resetFormularioDespesa() {
+    document.getElementById('formDespesa').reset();
+    // Esta linha abaixo garante que pegue a data correta do Brasil
+    const hojeBrasil = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
+    document.getElementById('dataDespesa').value = hojeBrasil;
+}
+
+function irParaHoje() {
+    dataVisualizacaoAtual = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
+    renderizarDashboard();
+}
+
+// Inicialização
+window.addEventListener('load', () => setTimeout(atualizarSelectPrincipal, 500));
+
+    
+
+
+
+
+
+
+function filtrarPacientes() {
+    // Pega o que o usuário digitou
+    const termoBusca = document.getElementById('buscaPaciente').value.toLowerCase();
+    
+    // Pega todas as linhas da tabela de pacientes
+    // (Assumindo que você usa <tr> para cada paciente)
+    const linhas = document.querySelectorAll('#listaPacientesConteudo tr');
+
+    linhas.forEach(linha => {
+        // Pega o texto da primeira coluna (onde costuma estar o nome)
+        const nomePaciente = linha.querySelector('td').textContent.toLowerCase();
+        
+        if (nomePaciente.includes(termoBusca)) {
+            linha.style.display = ""; // Mostra se encontrar
+        } else {
+            linha.style.display = "none"; // Esconde se não encontrar
+        }
+    });
+}
+
+
+
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5159fc7468ba13',t:'MTc2OTYxMjM0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
