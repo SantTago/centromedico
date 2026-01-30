@@ -428,7 +428,44 @@
        Gestão completa de recebimentos, despesas e comissões
       </div>
      </div>
-     <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button onclick="exportarDadosParaArquivo()" class="header-btn export-btn">📥 Exportar</button> <label class="header-btn" style="cursor: pointer; display: flex; align-items: center;"> 📤 Importar <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarDadosDeArquivo(this)"> </label> <button onclick="limparTodosDados()" class="header-btn clear-btn">🗑️ Limpar Tudo</button>
+     <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button onclick="abrirModalExportar()" class="header-btn export-btn">📥 Exportar</button> <label class="header-btn" style="cursor: pointer; display: flex; align-items: center;"> 📤 Importar <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarDadosDeArquivo(this)"> </label> <button onclick="limparTodosDados()" class="header-btn clear-btn">🗑️ Limpar Tudo</button>
+
+
+      <div id="modalExportar" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 6000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+  <div style="background: white; padding: 32px; border-radius: 20px; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+    <h2 style="font-size: 20px; font-weight: 700; color: #333; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Selecionar Período de Exportação</h2>
+    
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+      <button onclick="exportarProcessar('tudo')" style="width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 10px; background: #f8f9fa; cursor: pointer; text-align: left; font-weight: 500;">📁 Baixar Tudo (Histórico Completo)</button>
+      
+      <div style="padding: 15px; border: 1px solid #dee2e6; border-radius: 10px;">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #666; margin-bottom: 10px;">Baixar por Período:</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+          <div>
+            <span style="font-size: 11px; color: #999;">Data Inicial:</span>
+            <input type="date" id="exportDataInicio" class="form-input" style="width: 100%;">
+          </div>
+          <div>
+            <span style="font-size: 11px; color: #999;">Data Final:</span>
+            <input type="date" id="exportDataFim" class="form-input" style="width: 100%;">
+          </div>
+        </div>
+        <button onclick="exportarProcessar('periodo')" style="width: 100%; padding: 10px; background: #0056b3; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Confirmar Período</button>
+      </div>
+
+      <button onclick="exportarProcessar('7dias')" style="width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 10px; background: #f8f9fa; cursor: pointer; text-align: left; font-weight: 500;">📅 Últimos 7 Dias</button>
+    </div>
+
+    <div style="margin-top: 20px; text-align: right;">
+      <button onclick="fecharModalExportar()" style="padding: 8px 20px; color: #666; background: none; border: none; cursor: pointer;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
      </div>
     </div><!-- Calendário de Navegação Diária -->
     <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
@@ -935,78 +972,52 @@ document.getElementById('patientForm').onsubmit = function(e) {
     };
     
     // Importar dados de arquivo JSON
-    window.importarDadosDeArquivo = function(input) {
-      const file = input.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
+    // O modelo ACUMULATIVO:
+function importarDadosDeArquivo(input) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
         try {
-          const dados = JSON.parse(e.target.result);
-          
-          // Validar estrutura básica
-          if (!dados.profissionais || !dados.recebimentos) {
-            mostrarMensagem('❌ Arquivo inválido - estrutura incorreta', 'error');
-            return;
-          }
-          
-          // Confirmar importação
-          const confirmDiv = document.createElement('div');
-          confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 500px;';
-          confirmDiv.innerHTML = `
-            <h3 style="margin: 0 0 16px 0; color: #333;">📥 Confirmar Importação</h3>
-            <p style="margin: 0 0 8px 0; color: #666;">O arquivo contém:</p>
-            <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; text-align: left;">
-              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">⚕️ ${dados.profissionais?.length || 0} profissionais</li>
-              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">👤 ${dados.pacientes?.length || 0} pacientes</li>
-              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">💰 ${dados.recebimentos?.length || 0} recebimentos</li>
-              <li style="padding: 8px; background: #f8f9fa; margin: 4px 0; border-radius: 6px;">💸 ${dados.despesas?.length || 0} despesas</li>
-            </ul>
-            <p style="margin: 0 0 24px 0; color: #dc3545; font-weight: 600;">⚠️ Isso irá substituir todos os dados atuais!</p>
-            <div style="display: flex; gap: 12px; justify-content: center;">
-              <button id="confirmImport" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Importar</button>
-              <button id="cancelImport" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-            </div>
-          `;
-          
-          const backdrop = document.createElement('div');
-          backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
-          
-          document.body.appendChild(backdrop);
-          document.body.appendChild(confirmDiv);
-          
-          document.getElementById('cancelImport').addEventListener('click', () => {
-            backdrop.remove();
-            confirmDiv.remove();
-            input.value = '';
-          });
-          
-          document.getElementById('confirmImport').addEventListener('click', () => {
-            profissionais = dados.profissionais || [];
-            pacientes = dados.pacientes || [];
-            recebimentos = dados.recebimentos || [];
-            despesas = dados.despesas || [];
-            tiposAtendimento = dados.tiposAtendimento || [];
-            configsCaixaDia = dados.configsCaixaDia || [];
+            const dadosImportados = JSON.parse(e.target.result);
             
+            // 1. Acumular Profissionais (evitando duplicados pelo nome)
+            if (dadosImportados.profissionais) {
+                dadosImportados.profissionais.forEach(novoProf => {
+                    const jaExiste = profissionais.find(p => p.nome === novoProf.nome);
+                    if (!jaExiste) profissionais.push(novoProf);
+                });
+            }
+
+            // 2. Acumular Pacientes (evitando duplicados pelo ID ou nome)
+            if (dadosImportados.pacientes) {
+                dadosImportados.pacientes.forEach(novoPac => {
+                    const jaExiste = pacientes.find(p => p.nome === novoPac.nome);
+                    if (!jaExiste) pacientes.push(novoPac);
+                });
+            }
+
+            // 3. Acumular Recebimentos e Despesas (Geralmente adiciona tudo)
+            if (dadosImportados.recebimentos) {
+                recebimentos.push(...dadosImportados.recebimentos);
+            }
+            if (dadosImportados.despesas) {
+                despesas.push(...dadosImportados.despesas);
+            }
+
+            // Salva no LocalStorage e atualiza a tela
             salvarDados();
-            atualizarInterface();
-            
-            backdrop.remove();
-            confirmDiv.remove();
-            input.value = '';
-            
-            mostrarMensagem('✅ Dados importados com sucesso!', 'success');
-          });
-          
+            location.reload(); // Recarrega para garantir que os gráficos e tabelas processem tudo
+            alert("✅ Dados importados e acumulados com sucesso!");
+
         } catch (error) {
-          console.error('Erro ao importar:', error);
-          mostrarMensagem('❌ Erro ao ler arquivo - JSON inválido', 'error');
-          input.value = '';
+            console.error("Erro na importação:", error);
+            alert("❌ Erro ao processar o arquivo.");
         }
-      };
-      reader.readAsText(file);
     };
+    reader.readAsText(input.files[0]);
+}
+
+
+
     
     // Limpar todos os dados
     window.limparTodosDados = function() {
@@ -1726,6 +1737,7 @@ submitBtn.addEventListener('click', async (e) => {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Carregando...';
 
+    
     try {
         // 2. Lógica para salvar no LocalStorage
         const pacientes = JSON.parse(localStorage.getItem('pacientes') || '[]');
@@ -2894,101 +2906,92 @@ submitBtn.addEventListener('click', async (e) => {
 // SISTEMA DE GERENCIAMENTO DE ATENDIMENTOS
 // ==========================================
 
+// ==========================================
+// SISTEMA DE GERENCIAMENTO DE ATENDIMENTOS (CORRIGIDO)
+// ==========================================
+
 document.getElementById('gerenciarAtendimentos').onclick = function(e) {
     e.preventDefault();
     
-    // Inicia com valores padrão se estiver vazio
+    // 1. Garante que a lista de tipos existe. Se estiver vazia ou nula, cria padrão.
+    // Nota: A estrutura do seu sistema usa objetos {nome: 'X', valor: 'x'}, mas o código simplificado usava strings.
+    // Vamos padronizar para objetos para compatibilidade com o resto do seu código.
     if (!tiposAtendimento || tiposAtendimento.length === 0) {
-        tiposAtendimento = ['Consulta', 'Procedimento', 'Retorno', 'Cirurgia'];
+        tiposAtendimento = [
+             { nome: 'Consulta', valor: 'consulta' },
+             { nome: 'Procedimento', valor: 'procedimento' },
+             { nome: 'Retorno', valor: 'retorno' },
+             { nome: 'Cirurgia', valor: 'cirurgia' }
+        ];
         salvarDados();
     }
 
+    // 2. Renderiza o Modal
     const modalGerenciarHTML = `
-        <div id="modalGerenciarTipos" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 6000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-            <div style="background: white; padding: 25px; border-radius: 15px; width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0; color: #333; font-weight: 700;">⚙️ Gerenciar Atendimentos</h3>
-                    <button type="button" onclick="document.getElementById('modalGerenciarTipos').remove()" style="cursor: pointer; background: none; border: none; font-size: 24px; color: #999;">&times;</button>
+        <div id="modalGerenciarTipos" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+            <div style="background: white; padding: 24px; border-radius: 16px; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="margin: 0; color: #333; font-weight: 700; font-size: 18px;">⚙️ Gerenciar Tipos</h3>
+                    <button type="button" onclick="document.getElementById('modalGerenciarTipos').remove()" style="cursor: pointer; background: #f1f3f5; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #666;">&times;</button>
                 </div>
                 
-                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-                    <input type="text" id="inputNovoTipo" placeholder="Novo tipo..." style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
-                    <button type="button" id="btnConfirmarAdd" style="background: #28a745; color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer;">Add</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                    <input type="text" id="inputNovoTipo" placeholder="Novo tipo (ex: Exame)" style="flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; outline: none; transition: border 0.2s;">
+                    <button type="button" id="btnConfirmarAdd" style="background: #10b981; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Add</button>
                 </div>
 
-                <div id="listaItensTipos" style="max-height: 200px; overflow-y: auto;">
+                <div style="margin-bottom: 10px; font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600;">Tipos Cadastrados</div>
+                <div id="listaItensTipos" style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
                     ${tiposAtendimento.map((tipo, i) => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                            <span style="font-size: 14px;">${tipo}</span>
-                            <button type="button" onclick="removerTipoAtendimento(${i})" style="color: #dc3545; background: none; border: none; cursor: pointer;">Excluir</button>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e9ecef;">
+                            <span style="font-size: 14px; color: #333; font-weight: 500;">${tipo.nome || tipo}</span>
+                            <button type="button" onclick="removerTipoAtendimentoLocal(${i})" style="color: #dc3545; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600;">Excluir</button>
                         </div>
                     `).join('')}
                 </div>
             </div>
         </div>
     `;
+    
+    // Remove modal anterior se existir (evita duplicação)
+    const modalAntigo = document.getElementById('modalGerenciarTipos');
+    if (modalAntigo) modalAntigo.remove();
+
     document.body.insertAdjacentHTML('beforeend', modalGerenciarHTML);
 
+    // Foco no input
+    document.getElementById('inputNovoTipo').focus();
+
+    // Ação do Botão Adicionar
     document.getElementById('btnConfirmarAdd').onclick = function() {
         const nome = document.getElementById('inputNovoTipo').value.trim();
         if (nome) {
-            tiposAtendimento.push(nome);
-            salvarDados(); // Grava no localStorage local
-            atualizarSelectPrincipal();
+            // Adiciona no formato correto de objeto
+            const valorSlug = nome.toLowerCase().replace(/ /g, '_');
+            tiposAtendimento.push({ nome: nome, valor: valorSlug });
+            
+            salvarDados(); // Usa a função principal do sistema
+            atualizarSelectTiposAtendimento(); // Usa a função principal correta
+            
+            // Recarrega o modal para mostrar o novo item
             document.getElementById('modalGerenciarTipos').remove();
             document.getElementById('gerenciarAtendimentos').click();
         }
     };
 };
 
-function removerTipoAtendimento(index) {
-    if (confirm('Deseja excluir?')) {
+// Função global para remover (agora compatível com o modal)
+window.removerTipoAtendimentoLocal = function(index) {
+    if (confirm('Tem certeza que deseja remover este tipo de atendimento?')) {
         tiposAtendimento.splice(index, 1);
-        salvarDados(); 
-        atualizarSelectPrincipal();
+        salvarDados();
+        atualizarSelectTiposAtendimento();
+        
+        // Recarrega o modal
         document.getElementById('modalGerenciarTipos').remove();
         document.getElementById('gerenciarAtendimentos').click();
     }
-}
-
-function atualizarSelectPrincipal() {
-    const select = document.getElementById('tipoAtendimento');
-    if (!select) return;
-    const selecionado = select.value;
-    select.innerHTML = '<option value="">Selecione...</option>';
-    tiposAtendimento.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.toLowerCase();
-        opt.textContent = t;
-        select.appendChild(opt);
-    });
-    select.value = selecionado;
-}
-
-// Para o formulário de Recebimento
-function resetFormularioRecebimento() {
-    document.getElementById('formRecebimento').reset();
-    // Esta linha abaixo garante que pegue a data correta do Brasil
-    const hojeBrasil = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
-    document.getElementById('dataRecebimento').value = hojeBrasil;
-}
-
-// Para o formulário de Despesa
-function resetFormularioDespesa() {
-    document.getElementById('formDespesa').reset();
-    // Esta linha abaixo garante que pegue a data correta do Brasil
-    const hojeBrasil = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
-    document.getElementById('dataDespesa').value = hojeBrasil;
-}
-
-function irParaHoje() {
-    dataVisualizacaoAtual = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
-    renderizarDashboard();
-}
-
-// Inicialização
-window.addEventListener('load', () => setTimeout(atualizarSelectPrincipal, 500));
-
+};
     
 
 
@@ -3014,6 +3017,65 @@ function filtrarPacientes() {
             linha.style.display = "none"; // Esconde se não encontrar
         }
     });
+}
+
+
+
+
+
+function abrirModalExportar() {
+    document.getElementById('modalExportar').style.display = 'flex';
+}
+
+function fecharModalExportar() {
+    document.getElementById('modalExportar').style.display = 'none';
+}
+
+function exportarProcessar(tipo) {
+    let dadosParaExportar = {
+        profissionais,
+        pacientes,
+        tiposAtendimento,
+        configsCaixaDia,
+        recebimentos: [],
+        despesas: []
+    };
+
+    const hoje = new Date();
+    
+    if (tipo === 'tudo') {
+        dadosParaExportar.recebimentos = recebimentos;
+        dadosParaExportar.despesas = despesas;
+    } else if (tipo === '7dias') {
+        const seteDiasAtras = new Date();
+        seteDiasAtras.setDate(hoje.getDate() - 7);
+        
+        dadosParaExportar.recebimentos = recebimentos.filter(r => new Date(r.data) >= seteDiasAtras);
+        dadosParaExportar.despesas = despesas.filter(d => new Date(d.data) >= seteDiasAtras);
+    } else if (tipo === 'periodo') {
+        const inicio = document.getElementById('exportDataInicio').value;
+        const fim = document.getElementById('exportDataFim').value;
+        
+        if (!inicio || !fim) {
+            alert("Por favor, selecione as duas datas.");
+            return;
+        }
+        
+        dadosParaExportar.recebimentos = recebimentos.filter(r => r.data >= inicio && r.data <= fim);
+        dadosParaExportar.despesas = despesas.filter(d => d.data >= inicio && d.data <= fim);
+    }
+
+    // Executa o download do ficheiro JSON
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dadosParaExportar, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `backup_centro_medico_${tipo}_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+    
+    fecharModalExportar();
+    alert(`Exportação (${tipo}) concluída com sucesso!`);
 }
 
 
