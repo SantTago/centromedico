@@ -528,6 +528,178 @@
 </button>
 
 
+
+
+
+
+<button id="openStockModal" class="header-btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px; border: none; border-radius: 8px; cursor: pointer;"> 
+    <span style="font-size: 24px;">📦</span> <span>Estoque de Produtos</span> 
+</button>
+
+<div id="modalEstoque" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+  <div style="background: white; padding: 32px; border-radius: 20px; width: 95%; max-width: 900px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+        <h2 style="font-size: 22px; font-weight: 700; color: #d97706; margin: 0;">📦 Controle de Estoque</h2>
+        <button onclick="fecharModalEstoque()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+        <div style="background: #f8fafc; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0;">
+            <small style="color: #64748b; font-weight: bold;">TOTAL UNIDADES</small>
+            <div id="dashTotal" style="font-size: 20px; font-weight: 800;">0</div>
+        </div>
+        <div style="background: #fffbeb; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #fef3c7;">
+            <small style="color: #b45309; font-weight: bold;">ESTOQUE BAIXO</small>
+            <div id="dashBaixo" style="font-size: 20px; font-weight: 800; color: #d97706;">0</div>
+        </div>
+        <div style="background: #fef2f2; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #fee2e2;">
+            <small style="color: #991b1b; font-weight: bold;">ZERADOS</small>
+            <div id="dashZerado" style="font-size: 20px; font-weight: 800; color: #dc2626;">0</div>
+        </div>
+    </div>
+
+    <div style="background: #fcfcfc; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+            <div>
+                <label style="display:block; font-size:11px; font-weight:bold;">NOME DO PRODUTO</label>
+                <input type="text" id="estoqueNome" class="form-input" style="width:100%" placeholder="Seringa, Luva...">
+            </div>
+            <div>
+                <label style="display:block; font-size:11px; font-weight:bold;">QTD</label>
+                <input type="number" id="estoqueQtd" class="form-input" style="width:100%" value="0">
+            </div>
+            <div>
+                <label style="display:block; font-size:11px; font-weight:bold;">MÍNIMO</label>
+                <input type="number" id="estoqueMin" class="form-input" style="width:100%" value="5">
+            </div>
+            <button onclick="salvarProduto()" class="submit-btn" style="background:#d97706; padding: 10px 20px;">+ Add</button>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+        <input type="text" id="searchEstoque" onkeyup="renderizarEstoque()" placeholder="🔍 Pesquisar por nome..." style="flex: 2; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
+        
+        <select id="filtroStatus" onchange="renderizarEstoque()" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-weight: bold;">
+            <option value="todos">📋 Ver Todos</option>
+            <option value="baixo">⚠️ Estoque Baixo</option>
+            <option value="zerado">🚫 Zerados</option>
+        </select>
+    </div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>PRODUTO</th>
+                <th>QTD</th>
+                <th>MÍNIMO</th>
+                <th>STATUS</th>
+                <th>AÇÃO</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaEstoqueCorpo"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let estoque = JSON.parse(localStorage.getItem('estoque_clinica')) || [];
+
+document.getElementById('openStockModal').onclick = () => {
+    document.getElementById('modalEstoque').style.display = 'flex';
+    renderizarEstoque();
+};
+function fecharModalEstoque() { document.getElementById('modalEstoque').style.display = 'none'; }
+
+function salvarProduto() {
+    const nome = document.getElementById('estoqueNome').value;
+    const qtd = parseInt(document.getElementById('estoqueQtd').value);
+    const min = parseInt(document.getElementById('estoqueMin').value);
+    if(!nome) return alert("Digite o nome do produto");
+
+    const index = estoque.findIndex(p => p.nome.toLowerCase() === nome.toLowerCase());
+    if(index >= 0) {
+        estoque[index].qtd += qtd;
+        estoque[index].min = min;
+    } else {
+        estoque.push({ nome, qtd, min });
+    }
+    localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
+    document.getElementById('estoqueNome').value = '';
+    renderizarEstoque();
+}
+
+function darBaixa(nome) {
+    const index = estoque.findIndex(p => p.nome === nome);
+    if(estoque[index].qtd > 0) {
+        estoque[index].qtd--;
+        localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
+        renderizarEstoque();
+    }
+}
+
+function renderizarEstoque() {
+    const busca = document.getElementById('searchEstoque').value.toLowerCase();
+    const filtro = document.getElementById('filtroStatus').value;
+    const corpo = document.getElementById('tabelaEstoqueCorpo');
+    
+    let tQtd = 0, tBaixo = 0, tZerado = 0;
+    corpo.innerHTML = '';
+
+    estoque.forEach(p => {
+        const isZerado = p.qtd <= 0;
+        const isBaixo = p.qtd > 0 && p.qtd <= p.min;
+
+        // Atualiza Dashboard
+        tQtd += p.qtd;
+        if(isZerado) tZerado++;
+        if(isBaixo) tBaixo++;
+
+        // Lógica do Filtro
+        let exibir = p.nome.toLowerCase().includes(busca);
+        if(filtro === 'baixo' && !isBaixo) exibir = false;
+        if(filtro === 'zerado' && !isZerado) exibir = false;
+
+        if(exibir) {
+            let statusLabel = isZerado ? '<b style="color:red">🚫 ZERADO</b>' : (isBaixo ? '<b style="color:#d97706">⚠️ BAIXO</b>' : '<b style="color:green">✅ OK</b>');
+            corpo.innerHTML += `
+                <tr style="${isZerado ? 'background:#fef2f2' : (isBaixo ? 'background:#fffbeb' : '')}">
+                    <td><strong>${p.nome}</strong></td>
+                    <td style="font-weight:bold; font-size:16px">${p.qtd}</td>
+                    <td>${p.min}</td>
+                    <td>${statusLabel}</td>
+                    <td>
+                        <button onclick="darBaixa('${p.nome}')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">Baixa -1</button>
+                        <button onclick="removerItem('${p.nome}')" style="background:none; border:none; color:#ccc; margin-left:8px; cursor:pointer">🗑️</button>
+                    </td>
+                </tr>`;
+        }
+    });
+
+    document.getElementById('dashTotal').innerText = tQtd;
+    document.getElementById('dashBaixo').innerText = tBaixo;
+    document.getElementById('dashZerado').innerText = tZerado;
+}
+
+function removerItem(nome) {
+    if(confirm("Excluir item?")) {
+        estoque = estoque.filter(p => p.nome !== nome);
+        localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
+        renderizarEstoque();
+    }
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
 <div id="listaPacientesConteudo">
     </div>
      </div>
