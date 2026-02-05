@@ -461,13 +461,15 @@
     </div>
   </div>
 </div>
+ </div>
+    </div>
 
 
 
 
 
-     </div>
-    </div><!-- Calendário de Navegação Diária -->
+    
+    <!-- Calendário de Navegação Diária -->
     <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #333;">📅 Navegação por Dia</h2><button id="btnHoje" style="padding: 10px 20px; background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,86,179,0.3);"> 📌 Voltar para Hoje </button>
@@ -708,11 +710,6 @@ function removerItem(nome) {
      </div>
 
 
-
-
-
-
-
      <div id="modalPaciente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
   <div style="background: white; padding: 32px; border-radius: 20px; width: 90%; max-width: 550px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
@@ -889,32 +886,62 @@ function removerItem(nome) {
        </div>
       </div>
      </div>
-    </div><!-- Table -->
-    <div class="table-container">
-     <h2 class="section-title">Histórico de Recebimentos</h2>
-     <table class="data-table">
-      <thead>
-       <tr>
-        <th>DATA</th>
-        <th>HORA</th>
-        <th>PROFISSIONAL</th>
-        <th>VALOR BRUTO</th>
-        <th>ATENDIMENTO</th>
-        <th>PAGAMENTO</th>
-        <th style="color: #dc3545;">VALOR PROF.</th>
-        <th class="liquido-col">LÍQUIDO CLÍNICA</th>
-        <th>AÇÃO</th>
-       </tr>
-      </thead>
-      <tbody>
-       <tr>
-        <td colspan="9" style="text-align: center; padding: 40px; color: #999;">📋 Nenhum recebimento registrado ainda</td>
-       </tr>
-      </tbody>
-     </table>
     </div>
+    
+    
+    
+    
+    
+<div class="table-container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 class="section-title" style="margin-bottom: 0;">📜 Extrato de Movimentações</h2>
+    
+    <div style="display: flex; gap: 8px;">
+      <span style="font-size: 12px; padding: 4px 8px; background: #d1fae5; color: #065f46; border-radius: 4px;">Entradas</span>
+      <span style="font-size: 12px; padding: 4px 8px; background: #fee2e2; color: #991b1b; border-radius: 4px;">Saídas</span>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>HORA</th>
+        <th>TIPO</th>
+        <th>DESCRIÇÃO / PROFISSIONAL</th>
+        <th>FORMA PAGT.</th>
+        <th style="text-align: right;">VALOR</th>
+        <th style="text-align: center;">AÇÃO</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaExtratoCorpo">
+      </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
    </div>
   </div>
+
+
+
+
+
+
+
+
+
   <script>
     // Sistema de Login
     const LOGIN_CORRETO = 'centromedico';
@@ -1170,6 +1197,7 @@ function importarDadosDeArquivo(input) {
             // 3. Acumular Recebimentos e Despesas (Geralmente adiciona tudo)
             if (dadosImportados.recebimentos) {
                 recebimentos.push(...dadosImportados.recebimentos);
+                // Linha removida
             }
             if (dadosImportados.despesas) {
                 despesas.push(...dadosImportados.despesas);
@@ -1225,6 +1253,7 @@ function importarDadosDeArquivo(input) {
         
         localStorage.removeItem(STORAGE_KEY);
         atualizarInterface();
+        updateTable();
         
         backdrop.remove();
         confirmDiv.remove();
@@ -1240,11 +1269,13 @@ function importarDadosDeArquivo(input) {
       updateDashboard();
       atualizarSelectTiposAtendimento();
       atualizarDisplayValorInicial();
+      updateTable();
     }
     
     // Inicializar aplicação
     carregarDados();
     atualizarInterface();
+    updateTable();
     
     // Função para atualizar display do valor inicial (por dia)
     function atualizarDisplayValorInicial() {
@@ -1279,6 +1310,9 @@ function importarDadosDeArquivo(input) {
       const dataFormatada = new Date(dataVisualizacaoAtual + 'T12:00:00').toLocaleDateString('pt-BR');
       
       modalContent.innerHTML = `
+
+      
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
           <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">💰 Definir Valor Inicial do Caixa</h2>
           <button id="closeValorInicialModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
@@ -1393,27 +1427,39 @@ function importarDadosDeArquivo(input) {
       // Atualizar resumo do dia
       atualizarResumoDia();
     }
+
+
+
     
     function atualizarResumoDia() {
+      // Filtra recebimentos apenas do dia exato selecionado
       const recebimentosDia = recebimentos.filter(r => {
-        const dataRec = new Date(r.data).toISOString().split('T')[0];
-        return dataRec === dataVisualizacaoAtual;
+        // Garante que pegamos só a parte da data YYYY-MM-DD
+        const rData = r.data.includes('T') ? r.data.split('T')[0] : r.data;
+        return rData === dataVisualizacaoAtual;
       });
       
+      // Filtra despesas apenas do dia exato
       const despesasDia = despesas.filter(d => {
-        const dataDes = new Date(d.data).toISOString().split('T')[0];
-        return dataDes === dataVisualizacaoAtual;
+        const dData = d.data.includes('T') ? d.data.split('T')[0] : d.data;
+        return dData === dataVisualizacaoAtual;
       });
       
       const totalRecebidoDia = recebimentosDia.reduce((sum, r) => sum + r.valorBruto, 0);
       const totalDespesasDia = despesasDia.reduce((sum, d) => sum + d.valor, 0);
-      // Líquido = soma de todos os valorLiquido (que já é o que fica para clínica)
       const totalLiquidoDia = recebimentosDia.reduce((sum, r) => sum + r.valorLiquido, 0);
       
-      document.getElementById('resumoDiaRecebimentos').textContent = `R$ ${totalRecebidoDia.toFixed(2)}`;
-      document.getElementById('resumoDiaDespesas').textContent = `R$ ${totalDespesasDia.toFixed(2)}`;
-      document.getElementById('resumoDiaLiquido').textContent = `R$ ${totalLiquidoDia.toFixed(2)}`;
+      // Atualiza os elementos na tela
+      const elRecebimentos = document.getElementById('resumoDiaRecebimentos');
+      const elDespesas = document.getElementById('resumoDiaDespesas');
+      const elLiquido = document.getElementById('resumoDiaLiquido');
+
+      if(elRecebimentos) elRecebimentos.textContent = `R$ ${totalRecebidoDia.toFixed(2)}`;
+      if(elDespesas) elDespesas.textContent = `R$ ${totalDespesasDia.toFixed(2)}`;
+      if(elLiquido) elLiquido.textContent = `R$ ${totalLiquidoDia.toFixed(2)}`;
     }
+
+
     
     // Botões de navegação
     document.getElementById('btnDiaAnterior').addEventListener('click', () => {
@@ -2061,6 +2107,11 @@ submitBtn.addEventListener('click', async (e) => {
         });
       };
     });
+
+
+
+
+    
     
     // CADASTRO DE PROFISSIONAL - Botão para abrir modal
     document.getElementById('openProfessionalModal').addEventListener('click', () => {
@@ -2275,39 +2326,41 @@ submitBtn.addEventListener('click', async (e) => {
       }
       
       lista.innerHTML = profissionais.map((prof) => `
-        <div style="background: white; padding: 20px; border-radius: 16px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; position: relative; overflow: hidden;">
-          <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);"></div>
-          
-          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                ⚕️
-              </div>
-              <div>
-                <div style="font-weight: 700; font-size: 16px; color: #333; margin-bottom: 2px;">${prof.nome}</div>
-                ${prof.profissao ? `<div style="font-size: 12px; color: #666;">📋 ${prof.profissao}</div>` : ''}
-              </div>
-            </div>
-            <button onclick="removerProfissionalDB('${prof.__backendId}')" style="background: #fff; border: 2px solid #e9ecef; color: #dc3545; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700; transition: all 0.2s; display: flex; align-items: center; gap: 4px;" onmouseover="this.style.background='#dc3545'; this.style.color='white'; this.style.borderColor='#dc3545';" onmouseout="this.style.background='#fff'; this.style.color='#dc3545'; this.style.borderColor='#e9ecef';">
-              <span>❌</span> Remover
-            </button>
+    <div style="background: white; padding: 20px; border-radius: 16px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);"></div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+            ⚕️
           </div>
-          
-          <div style="border-top: 1px solid #f0f0f0; padding-top: 12px; margin-top: 12px;">
-            ${prof.telefone ? `
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <span style="font-size: 14px;">📞</span>
-                <span style="font-size: 13px; color: #666;">${prof.telefone}</span>
-              </div>
-            ` : ''}
-            
-            <div style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 10px 14px; border-radius: 8px; margin-top: 8px;">
-              <span style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Percentual</span>
-              <span style="font-size: 18px; font-weight: 700; color: #667eea;">${prof.porcentagem}%</span>
-            </div>
+          <div>
+            <div style="font-weight: 700; font-size: 16px; color: #333; margin-bottom: 2px;">${prof.nome}</div>
+            ${prof.profissao ? `<div style="font-size: 12px; color: #666;">📋 ${prof.profissao}</div>` : ''}
           </div>
         </div>
-      `).join('');
+
+        <button onclick="removerProfissionalLocal('${prof.id}')" style="background: #fff; border: 2px solid #e9ecef; color: #dc3545; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700; transition: all 0.2s; display: flex; align-items: center; gap: 4px;" onmouseover="this.style.background='#dc3545'; this.style.color='white'; this.style.borderColor='#dc3545';" onmouseout="this.style.background='#fff'; this.style.color='#dc3545'; this.style.borderColor='#e9ecef';">
+          <span>❌</span> Remover
+        </button>
+        
+      </div>
+      
+      <div style="border-top: 1px solid #f0f0f0; padding-top: 12px; margin-top: 12px;">
+        ${prof.telefone ? `
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 14px;">📞</span>
+            <span style="font-size: 13px; color: #666;">${prof.telefone}</span>
+          </div>
+        ` : ''}
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 10px 14px; border-radius: 8px; margin-top: 8px;">
+          <span style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Percentual</span>
+          <span style="font-size: 18px; font-weight: 700; color: #667eea;">${prof.porcentagem}%</span>
+        </div>
+      </div>
+    </div>
+`).join('');
       
       updateProfissionalSelect();
       updateProfissionaisDetalhamento();
@@ -2678,19 +2731,29 @@ submitBtn.addEventListener('click', async (e) => {
       submitBtn.textContent = 'Adicionar Despesa';
     });
 
-    function updateDashboard() {
-      // Obter mês e ano da data de visualização atual
+   
+    
+
+
+
+
+
+function updateDashboard() {
+      // Obter mês e ano da data de visualização atual (usando T12:00:00 para forçar hora local)
       const dataVizObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
       const mesAtual = dataVizObj.getMonth();
       const anoAtual = dataVizObj.getFullYear();
       
-      // Filtrar recebimentos de TODO O MÊS (do dia 1 até o último dia)
+      // Filtrar recebimentos de TODO O MÊS
       const recebimentosMesCompleto = recebimentos.filter(r => {
-        const dataRec = new Date(r.data);
+        // CORREÇÃO: Adicionamos 'T12:00:00' para garantir que a data não volte 1 dia pelo fuso horário
+        const dataStr = r.data.includes('T') ? r.data.split('T')[0] : r.data;
+        const dataRec = new Date(dataStr + 'T12:00:00');
+        
         const mesRec = dataRec.getMonth();
         const anoRec = dataRec.getFullYear();
         
-        // Mesmo mês e ano (independente do dia)
+        // Mesmo mês e ano
         return anoRec === anoAtual && mesRec === mesAtual;
       });
       
@@ -2698,11 +2761,13 @@ submitBtn.addEventListener('click', async (e) => {
       const totalBrutoMes = recebimentosMesCompleto.reduce((sum, r) => sum + r.valorBruto, 0);
       const totalLiquidoMes = recebimentosMesCompleto.reduce((sum, r) => sum + r.valorLiquido, 0);
       
-      // Atualizar cards de resumo com valores DO MÊS COMPLETO
-      document.querySelectorAll('.summary-card.bruto .summary-value')[0].textContent = `R$ ${totalBrutoMes.toFixed(2)}`;
-      document.querySelectorAll('.summary-card.liquido .summary-value')[0].textContent = `R$ ${totalLiquidoMes.toFixed(2)}`;
+      // Atualizar cards de resumo (Bruto e Líquido)
+      const cardBruto = document.querySelector('.summary-card.bruto .summary-value');
+      const cardLiquido = document.querySelector('.summary-card.liquido .summary-value');
+      if(cardBruto) cardBruto.textContent = `R$ ${totalBrutoMes.toFixed(2)}`;
+      if(cardLiquido) cardLiquido.textContent = `R$ ${totalLiquidoMes.toFixed(2)}`;
       
-      // Detalhamento por forma de pagamento (também do mês completo)
+      // Detalhamento por forma de pagamento (Cards Coloridos)
       const detailCards = document.querySelectorAll('.detail-section .detail-card');
       const totaisPagamento = {
         cartao: 0,
@@ -2712,35 +2777,50 @@ submitBtn.addEventListener('click', async (e) => {
       };
       
       recebimentosMesCompleto.forEach(r => {
-        if (totaisPagamento.hasOwnProperty(r.formaPagamento)) {
-          totaisPagamento[r.formaPagamento] += r.valorBruto;
+        // Normaliza a chave (minúsculo)
+        const chave = r.formaPagamento.toLowerCase();
+        if (totaisPagamento.hasOwnProperty(chave)) {
+          totaisPagamento[chave] += r.valorBruto;
         }
       });
       
-      detailCards[0].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.cartao.toFixed(2)}`;
-      detailCards[1].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.pix.toFixed(2)}`;
-      detailCards[2].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.dinheiro.toFixed(2)}`;
-      detailCards[3].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.unimed.toFixed(2)}`;
+      // Atualiza os valores nos cards (verifique a ordem no seu HTML: Cartão, Pix, Dinheiro, Unimed)
+      if(detailCards[0]) detailCards[0].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.cartao.toFixed(2)}`;
+      if(detailCards[1]) detailCards[1].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.pix.toFixed(2)}`;
+      if(detailCards[2]) detailCards[2].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.dinheiro.toFixed(2)}`;
+      if(detailCards[3]) detailCards[3].querySelector('.detail-value').textContent = `R$ ${totaisPagamento.unimed.toFixed(2)}`;
       
+      // Atualiza o restante da tela
       updateProfissionaisDetalhamento();
       updateTable();
       renderChartPagamento();
       renderChartProfissional();
+      
+      // CORREÇÃO IMPORTANTÍSSIMA: Força a atualização do resumo do dia também
+      atualizarResumoDia();
     }
 
+
+
+
+
+
+
+
+
     function updateTable() {
-      const tbody = document.querySelector('.data-table tbody');
-      
-      // Filtrar recebimentos do dia selecionado
-      const recebimentosDia = recebimentos.filter(r => {
-        const dataRec = new Date(r.data).toISOString().split('T')[0];
-        return dataRec === dataVisualizacaoAtual;
-      });
-      
-      if (recebimentosDia.length === 0) {
+     const tbody = document.querySelector('.data-table tbody');
+    
+    // Filtrar garantindo que a data seja comparada corretamente como string YYYY-MM-DD
+    const recebimentosDia = recebimentos.filter(r => {
+        // Se r.data já for uma string YYYY-MM-DD, compare direto
+        return r.data === dataVisualizacaoAtual;
+    });
+
+    if (recebimentosDia.length === 0) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #999;"> Nenhum recebimento registrado para este dia</td></tr>';
         return;
-      }
+    }
       
       tbody.innerHTML = recebimentosDia.map((rec) => `
         <tr>
@@ -2795,6 +2875,17 @@ submitBtn.addEventListener('click', async (e) => {
       });
     };
 
+   
+    
+
+
+
+
+
+
+
+
+
     document.getElementById('receiptForm').addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -2802,28 +2893,30 @@ submitBtn.addEventListener('click', async (e) => {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Salvando...';
       
+      // Pega os valores dos campos
       const valorBrutoStr = document.getElementById('valorBruto').value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
       const valorBruto = parseFloat(valorBrutoStr);
-      const profissionalIndex = parseInt(document.getElementById('profissional').value);
+      const profissionalIndex = document.getElementById('profissional').value; // Mantido como string para verificação
       const tipoAtendimento = document.getElementById('tipoAtendimento').value;
       const formaPagamento = document.getElementById('formaPagamento').value;
       const dataRecebimento = document.getElementById('dataRecebimento').value;
       
-      if (!valorBruto || isNaN(profissionalIndex) || !tipoAtendimento || !formaPagamento || !dataRecebimento) {
+      // Validação
+      if (!valorBruto || profissionalIndex === "" || !tipoAtendimento || !formaPagamento || !dataRecebimento) {
         mostrarMensagem('⚠️ Por favor, preencha todos os campos', 'warning');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Adicionar Recebimento';
         return;
       }
       
-      const prof = profissionais[profissionalIndex];
+      const prof = profissionais[parseInt(profissionalIndex)];
       
-      // Se o profissional tem 100% (não tem porcentagem configurada), o valor líquido vai TODO para a clínica
-      // Se o profissional tem menos de 100%, calcular normalmente
+      // CÁLCULO DOS VALORES
       let valorProfissional, valorLiquido;
       
       if (prof.porcentagem === 100) {
-        // Profissional não recebe nada (0%), clínica fica com tudo (100%)
+        // Se for 100% (ex: dono), consideramos que tudo é líquido da clínica OU tudo do profissional? 
+        // Pela lógica anterior: Profissional 0, Clínica recebe tudo (ajuste conforme sua preferência)
         valorProfissional = 0;
         valorLiquido = valorBruto;
       } else {
@@ -2832,27 +2925,35 @@ submitBtn.addEventListener('click', async (e) => {
         valorLiquido = valorBruto - valorProfissional;
       }
       
-      // Adicionar recebimento ao array local
-      recebimentos.push({
+      // --- AQUI ESTAVA O ERRO: FALTAVA CRIAR O OBJETO E ADICIONAR NA LISTA ---
+      
+      const novoRecebimento = {
         id: Date.now().toString(),
+        data: dataRecebimento,
         valorBruto: valorBruto,
-        valorLiquido: valorLiquido,
-        valorProfissional: valorProfissional,
-        profissionalIndex: profissionalIndex,
+        profissionalIndex: parseInt(profissionalIndex),
         profissionalNome: prof.nome,
         tipoAtendimento: tipoAtendimento,
         formaPagamento: formaPagamento,
-        data: new Date(dataRecebimento + 'T' + new Date().toTimeString().slice(0, 5)).toISOString()
-      });
+        valorProfissional: valorProfissional,
+        valorLiquido: valorLiquido,
+        dataRegistro: new Date().toISOString()
+      };
+      
+      // Adiciona na lista global
+      recebimentos.push(novoRecebimento);
+      
+      // -----------------------------------------------------------------------
       
       // Salvar no localStorage
       salvarDados();
       
-      // Atualizar interface
+      // Atualizar interface (Gráficos, Tabelas e Resumo do topo)
       updateDashboard();
       
       mostrarMensagem(`✅ Recebimento de R$ ${valorBruto.toFixed(2)} para ${prof.nome} adicionado!`, 'success');
       
+      // Reseta o formulário mas mantendo a data atual
       const dataAtual = document.getElementById('dataRecebimento').value;
       document.getElementById('receiptForm').reset();
       document.getElementById('dataRecebimento').value = dataAtual;
@@ -2860,6 +2961,21 @@ submitBtn.addEventListener('click', async (e) => {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Adicionar Recebimento';
     });
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    
 
     // Função para renderizar gráfico de pizza (Pagamento) - MÊS COMPLETO
     function renderChartPagamento() {
@@ -2957,6 +3073,31 @@ submitBtn.addEventListener('click', async (e) => {
         </div>
       `;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     // Função para renderizar gráfico de barras horizontais (Tipo de Atendimento) - MÊS COMPLETO
     function renderChartProfissional() {
@@ -3249,6 +3390,187 @@ function exportarProcessar(tipo) {
     fecharModalExportar();
     alert(`Exportação (${tipo}) concluída com sucesso!`);
 }
+
+
+
+
+
+
+function updateTable() {
+    const tbody = document.getElementById('tabelaExtratoCorpo');
+    tbody.innerHTML = '';
+
+    // 1. Pega Recebimentos do dia atual
+    const recsDia = recebimentos.filter(r => {
+        // Compatibilidade: verifica se a data é string ISO ou YYYY-MM-DD direto
+        const rData = r.data.includes('T') ? r.data.split('T')[0] : r.data;
+        return rData === dataVisualizacaoAtual;
+    }).map(r => ({ ...r, tipoItem: 'receita' })); // Marca como receita
+
+    // 2. Pega Despesas do dia atual
+    const despsDia = despesas.filter(d => {
+        const dData = d.data.includes('T') ? d.data.split('T')[0] : d.data;
+        return dData === dataVisualizacaoAtual;
+    }).map(d => ({ ...d, tipoItem: 'despesa' })); // Marca como despesa
+
+    // 3. Junta tudo e ordena por horário (do mais recente para o mais antigo)
+    const extratoUnificado = [...recsDia, ...despsDia].sort((a, b) => {
+        const dataA = new Date(a.data);
+        const dataB = new Date(b.data);
+        return dataB - dataA; // Decrescente
+    });
+
+    if (extratoUnificado.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: #999;">
+                    💤 Nenhuma movimentação registrada neste dia.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    // 4. Renderiza as linhas
+    tbody.innerHTML = extratoUnificado.map(item => {
+        const dataObj = new Date(item.data);
+        const hora = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        
+        let linhaHtml = '';
+
+        if (item.tipoItem === 'receita') {
+            // É UMA RECEITA (VERDE)
+            // Formata nome do tipo (Consulta, Exame...)
+            const tipoFormatado = item.tipoAtendimento.charAt(0).toUpperCase() + item.tipoAtendimento.slice(1);
+            
+            linhaHtml = `
+                <tr style="border-left: 4px solid #10b981;">
+                    <td style="font-weight: bold; color: #666;">${hora}</td>
+                    <td><span style="font-size: 11px; font-weight: bold; color: #10b981; background: #d1fae5; padding: 2px 6px; border-radius: 4px;">RECEITA</span></td>
+                    <td>
+                        <div style="font-weight: 600; color: #333;">${item.profissionalNome}</div>
+                        <div style="font-size: 11px; color: #666;">${tipoFormatado}</div>
+                    </td>
+                    <td style="text-transform: uppercase; font-size: 12px;">${item.formaPagamento}</td>
+                    <td style="text-align: right; font-weight: bold; color: #10b981;">+ R$ ${item.valorBruto.toFixed(2)}</td>
+                    <td style="text-align: center;">
+                        <button onclick="removerItemExtrato('receita', '${item.id}')" style="background: none; border: none; cursor: pointer; color: #ef4444;" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        } else {
+            // É UMA DESPESA (VERMELHO)
+            const catFormatada = item.categoria.charAt(0).toUpperCase() + item.categoria.slice(1);
+
+            linhaHtml = `
+                <tr style="border-left: 4px solid #ef4444; background: #fff5f5;">
+                    <td style="font-weight: bold; color: #666;">${hora}</td>
+                    <td><span style="font-size: 11px; font-weight: bold; color: #b91c1c; background: #fee2e2; padding: 2px 6px; border-radius: 4px;">DESPESA</span></td>
+                    <td>
+                        <div style="font-weight: 600; color: #333;">${item.descricao}</div>
+                        <div style="font-size: 11px; color: #666;">${catFormatada}</div>
+                    </td>
+                    <td style="text-transform: uppercase; font-size: 12px;">${item.formaPagamento}</td>
+                    <td style="text-align: right; font-weight: bold; color: #ef4444;">- R$ ${item.valor.toFixed(2)}</td>
+                    <td style="text-align: center;">
+                        <button onclick="removerItemExtrato('despesa', '${item.id || item.data}')" style="background: none; border: none; cursor: pointer; color: #ef4444;" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }
+        return linhaHtml;
+    }).join('');
+}
+
+// Nova função unificada para remover itens
+function removerItemExtrato(tipo, id) {
+    if(!confirm("Tem certeza que deseja excluir este item?")) return;
+
+    if (tipo === 'receita') {
+        const index = recebimentos.findIndex(r => r.id === id);
+        if (index > -1) recebimentos.splice(index, 1);
+    } else {
+        // Para despesas (se não tiver ID, usa a data como identificador)
+        const index = despesas.findIndex(d => (d.id === id) || (d.data === id));
+        if (index > -1) despesas.splice(index, 1);
+    }
+
+    salvarDados();
+    updateDashboard(); // Isso chama o updateTable() automaticamente
+    mostrarMensagem('🗑️ Item removido com sucesso!', 'success');
+}
+
+
+
+
+window.removerProfissionalLocal = function(id) {
+    // 1. Encontrar o profissional pelo ID
+    const index = profissionais.findIndex(p => p.id === id);
+    
+    if (index === -1) {
+        // Fallback: Tenta encontrar pelo __backendId caso seja um dado antigo importado
+        const indexBackend = profissionais.findIndex(p => p.__backendId === id);
+        if(indexBackend === -1) return;
+        // Se achou pelo backendId, ajusta o index
+        removerProfissionalLocal(profissionais[indexBackend].id);
+        return;
+    }
+
+    const profissional = profissionais[index];
+
+    // 2. Criar o Modal de Confirmação (Estilo visual do sistema)
+    const confirmDiv = document.createElement('div');
+    confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 5000; text-align: center; max-width: 400px; width: 90%;';
+    
+    confirmDiv.innerHTML = `
+        <div style="width: 60px; height: 60px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;">🗑️</div>
+        <h3 style="margin: 0 0 12px 0; color: #333; font-size: 20px;">Remover Profissional?</h3>
+        <p style="margin: 0 0 24px 0; color: #666; font-size: 14px;">
+            Tem certeza que deseja remover <strong>${profissional.nome}</strong>?<br>
+            <span style="font-size: 12px; color: #dc3545;">Isso não apagará os recebimentos históricos, mas ele não aparecerá em novos cadastros.</span>
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+            <button id="cancelRemoveProf" style="padding: 12px 24px; background: #f3f4f6; color: #4b5563; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Cancelar</button>
+            <button id="confirmRemoveProf" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);">Sim, Remover</button>
+        </div>
+    `;
+
+    // 3. Fundo escuro (Backdrop)
+    const backdrop = document.createElement('div');
+    backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4999; backdrop-filter: blur(2px);';
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(confirmDiv);
+
+    // 4. Lógica dos Botões
+    document.getElementById('cancelRemoveProf').onclick = () => {
+        backdrop.remove();
+        confirmDiv.remove();
+    };
+
+    document.getElementById('confirmRemoveProf').onclick = () => {
+        // Remove do array local
+        profissionais.splice(index, 1);
+        
+        // Salva no LocalStorage
+        salvarDados();
+        
+        // Atualiza toda a interface
+        renderProfissionaisList();
+        updateProfissionalSelect();
+        updateProfissionaisDetalhamento();
+        
+        // Remove o modal
+        backdrop.remove();
+        confirmDiv.remove();
+        
+        // Mensagem de sucesso
+        mostrarMensagem(`🗑️ ${profissional.nome} removido com sucesso!`);
+    };
+};
+
+
+
+
 
 
 

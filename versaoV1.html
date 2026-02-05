@@ -6,6 +6,7 @@
   <title>Painel Financeiro Centro Médico</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
   <style>
     body {
       box-sizing: border-box;
@@ -390,7 +391,6 @@
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body><!-- Tela de Login -->
@@ -409,7 +409,7 @@
      <div style="margin-bottom: 24px;"><label for="loginPassword" style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">🔒 Senha</label> <input type="password" id="loginPassword" placeholder="Digite sua senha" required style="width: 100%; padding: 14px; border: 2px solid #dee2e6; border-radius: 12px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.2s;">
      </div>
      <div id="loginError" style="display: none; background: #fee; border-left: 4px solid #dc3545; padding: 12px; border-radius: 8px; margin-bottom: 20px;"><span style="color: #dc3545; font-size: 13px; font-weight: 600;">❌ Login ou senha incorretos</span>
-     </div><button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0056b3 0%, #0084d4 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);"> Entrar no Sistema </button>
+     </div><button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #0056b3 0%, #0084d4 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);"> Entrar no Sistema → </button>
     </form>
     <div style="margin-top: 24px; text-align: center; padding-top: 24px; border-top: 1px solid #e9ecef;">
      <p style="margin: 0; font-size: 12px; color: #999;">🔒 Acesso restrito a usuários autorizados</p>
@@ -423,49 +423,7 @@
       🏥
      </div>
      <div style="flex: 1;">
-      <h1 class="main-title" id="mainTitle">Controle Financeiro Centro Médico</h1>
-      <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
-       Gestão completa de recebimentos, despesas e comissões
-      </div>
-     </div>
-     <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button onclick="abrirModalExportar()" class="header-btn export-btn">📥 Exportar</button> <label class="header-btn" style="cursor: pointer; display: flex; align-items: center;"> 📤 Importar <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarDadosDeArquivo(this)"> </label> <button onclick="limparTodosDados()" class="header-btn clear-btn">🗑️ Limpar Tudo</button>
-
-
-      <div id="modalExportar" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 6000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div style="background: white; padding: 32px; border-radius: 20px; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
-    <h2 style="font-size: 20px; font-weight: 700; color: #333; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Selecionar Período de Exportação</h2>
-    
-    <div style="display: flex; flex-direction: column; gap: 15px;">
-      <button onclick="exportarProcessar('tudo')" style="width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 10px; background: #f8f9fa; cursor: pointer; text-align: left; font-weight: 500;">📁 Baixar Tudo (Histórico Completo)</button>
-      
-      <div style="padding: 15px; border: 1px solid #dee2e6; border-radius: 10px;">
-        <label style="display: block; font-size: 13px; font-weight: 600; color: #666; margin-bottom: 10px;">Baixar por Período:</label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-          <div>
-            <span style="font-size: 11px; color: #999;">Data Inicial:</span>
-            <input type="date" id="exportDataInicio" class="form-input" style="width: 100%;">
-          </div>
-          <div>
-            <span style="font-size: 11px; color: #999;">Data Final:</span>
-            <input type="date" id="exportDataFim" class="form-input" style="width: 100%;">
-          </div>
-        </div>
-        <button onclick="exportarProcessar('periodo')" style="width: 100%; padding: 10px; background: #0056b3; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Confirmar Período</button>
-      </div>
-
-      <button onclick="exportarProcessar('7dias')" style="width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 10px; background: #f8f9fa; cursor: pointer; text-align: left; font-weight: 500;">📅 Últimos 7 Dias</button>
-    </div>
-
-    <div style="margin-top: 20px; text-align: right;">
-      <button onclick="fecharModalExportar()" style="padding: 8px 20px; color: #666; background: none; border: none; cursor: pointer;">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-
-
-
-
+      <h1 class="main-title" id="mainTitle">Controle Financeiro Centro Médico de Camocim</h1>
      </div>
     </div><!-- Calendário de Navegação Diária -->
     <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
@@ -494,7 +452,7 @@
        </div>
        <div><span style="font-size: 11px; color: #666;">Despesas:</span> <strong style="color: #dc3545; font-size: 16px; margin-left: 4px;" id="resumoDiaDespesas">R$ 0,00</strong>
        </div>
-       <div><span style="font-size: 11px; color: #666;">Liquido:</span> <strong style="color: #0056b3; font-size: 16px; margin-left: 4px;" id="resumoDiaLiquido">R$ 0,00</strong>
+       <div><span style="font-size: 11px; color: #666;">Líquido:</span> <strong style="color: #0056b3; font-size: 16px; margin-left: 4px;" id="resumoDiaLiquido">R$ 0,00</strong>
        </div>
       </div>
      </div>
@@ -516,252 +474,12 @@
        R$ 0,00
       </div>
      </div>
-
-
-
     </div><!-- Professional Registration Button -->
     <div style="margin-bottom: 32px;">
-
-     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;"><button id="openProfessionalModal" class="header-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">⚕️</span> <span>Cadastrar Novo Profissional</span> </button> <button id="openPatientModal" class="header-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">👤</span> <span>Cadastrar Novo Paciente</span> </button> <button id="openPatientListModal" class="header-btn" style="background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> 
-    <span style="font-size: 24px;">🔍</span> <span>Ver Lista de Pacientes</span> 
-    
-</button>
-
-
-
-
-
-
-<button id="openStockModal" class="header-btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px; border: none; border-radius: 8px; cursor: pointer;"> 
-    <span style="font-size: 24px;">📦</span> <span>Estoque de Produtos</span> 
-</button>
-
-<div id="modalEstoque" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div style="background: white; padding: 32px; border-radius: 20px; width: 95%; max-width: 900px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
-        <h2 style="font-size: 22px; font-weight: 700; color: #d97706; margin: 0;">📦 Controle de Estoque</h2>
-        <button onclick="fecharModalEstoque()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
-        <div style="background: #f8fafc; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0;">
-            <small style="color: #64748b; font-weight: bold;">TOTAL UNIDADES</small>
-            <div id="dashTotal" style="font-size: 20px; font-weight: 800;">0</div>
-        </div>
-        <div style="background: #fffbeb; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #fef3c7;">
-            <small style="color: #b45309; font-weight: bold;">ESTOQUE BAIXO</small>
-            <div id="dashBaixo" style="font-size: 20px; font-weight: 800; color: #d97706;">0</div>
-        </div>
-        <div style="background: #fef2f2; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #fee2e2;">
-            <small style="color: #991b1b; font-weight: bold;">ZERADOS</small>
-            <div id="dashZerado" style="font-size: 20px; font-weight: 800; color: #dc2626;">0</div>
-        </div>
-    </div>
-
-    <div style="background: #fcfcfc; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee;">
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
-            <div>
-                <label style="display:block; font-size:11px; font-weight:bold;">NOME DO PRODUTO</label>
-                <input type="text" id="estoqueNome" class="form-input" style="width:100%" placeholder="Seringa, Luva...">
-            </div>
-            <div>
-                <label style="display:block; font-size:11px; font-weight:bold;">QTD</label>
-                <input type="number" id="estoqueQtd" class="form-input" style="width:100%" value="0">
-            </div>
-            <div>
-                <label style="display:block; font-size:11px; font-weight:bold;">MÍNIMO</label>
-                <input type="number" id="estoqueMin" class="form-input" style="width:100%" value="5">
-            </div>
-            <button onclick="salvarProduto()" class="submit-btn" style="background:#d97706; padding: 10px 20px;">+ Add</button>
-        </div>
-    </div>
-
-    <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #f1f5f9; padding: 10px; border-radius: 8px;">
-        <input type="text" id="searchEstoque" onkeyup="renderizarEstoque()" placeholder="🔍 Pesquisar por nome..." style="flex: 2; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
-        
-        <select id="filtroStatus" onchange="renderizarEstoque()" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-weight: bold;">
-            <option value="todos">📋 Ver Todos</option>
-            <option value="baixo">⚠️ Estoque Baixo</option>
-            <option value="zerado">🚫 Zerados</option>
-        </select>
-    </div>
-
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>PRODUTO</th>
-                <th>QTD</th>
-                <th>MÍNIMO</th>
-                <th>STATUS</th>
-                <th>AÇÃO</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaEstoqueCorpo"></tbody>
-    </table>
-  </div>
-</div>
-
-<script>
-let estoque = JSON.parse(localStorage.getItem('estoque_clinica')) || [];
-
-document.getElementById('openStockModal').onclick = () => {
-    document.getElementById('modalEstoque').style.display = 'flex';
-    renderizarEstoque();
-};
-function fecharModalEstoque() { document.getElementById('modalEstoque').style.display = 'none'; }
-
-function salvarProduto() {
-    const nome = document.getElementById('estoqueNome').value;
-    const qtd = parseInt(document.getElementById('estoqueQtd').value);
-    const min = parseInt(document.getElementById('estoqueMin').value);
-    if(!nome) return alert("Digite o nome do produto");
-
-    const index = estoque.findIndex(p => p.nome.toLowerCase() === nome.toLowerCase());
-    if(index >= 0) {
-        estoque[index].qtd += qtd;
-        estoque[index].min = min;
-    } else {
-        estoque.push({ nome, qtd, min });
-    }
-    localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
-    document.getElementById('estoqueNome').value = '';
-    renderizarEstoque();
-}
-
-function darBaixa(nome) {
-    const index = estoque.findIndex(p => p.nome === nome);
-    if(estoque[index].qtd > 0) {
-        estoque[index].qtd--;
-        localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
-        renderizarEstoque();
-    }
-}
-
-function renderizarEstoque() {
-    const busca = document.getElementById('searchEstoque').value.toLowerCase();
-    const filtro = document.getElementById('filtroStatus').value;
-    const corpo = document.getElementById('tabelaEstoqueCorpo');
-    
-    let tQtd = 0, tBaixo = 0, tZerado = 0;
-    corpo.innerHTML = '';
-
-    estoque.forEach(p => {
-        const isZerado = p.qtd <= 0;
-        const isBaixo = p.qtd > 0 && p.qtd <= p.min;
-
-        // Atualiza Dashboard
-        tQtd += p.qtd;
-        if(isZerado) tZerado++;
-        if(isBaixo) tBaixo++;
-
-        // Lógica do Filtro
-        let exibir = p.nome.toLowerCase().includes(busca);
-        if(filtro === 'baixo' && !isBaixo) exibir = false;
-        if(filtro === 'zerado' && !isZerado) exibir = false;
-
-        if(exibir) {
-            let statusLabel = isZerado ? '<b style="color:red">🚫 ZERADO</b>' : (isBaixo ? '<b style="color:#d97706">⚠️ BAIXO</b>' : '<b style="color:green">✅ OK</b>');
-            corpo.innerHTML += `
-                <tr style="${isZerado ? 'background:#fef2f2' : (isBaixo ? 'background:#fffbeb' : '')}">
-                    <td><strong>${p.nome}</strong></td>
-                    <td style="font-weight:bold; font-size:16px">${p.qtd}</td>
-                    <td>${p.min}</td>
-                    <td>${statusLabel}</td>
-                    <td>
-                        <button onclick="darBaixa('${p.nome}')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">Baixa -1</button>
-                        <button onclick="removerItem('${p.nome}')" style="background:none; border:none; color:#ccc; margin-left:8px; cursor:pointer">🗑️</button>
-                    </td>
-                </tr>`;
-        }
-    });
-
-    document.getElementById('dashTotal').innerText = tQtd;
-    document.getElementById('dashBaixo').innerText = tBaixo;
-    document.getElementById('dashZerado').innerText = tZerado;
-}
-
-function removerItem(nome) {
-    if(confirm("Excluir item?")) {
-        estoque = estoque.filter(p => p.nome !== nome);
-        localStorage.setItem('estoque_clinica', JSON.stringify(estoque));
-        renderizarEstoque();
-    }
-}
-</script>
-
-
-
-
-
-
-
-
-
-
-
-<div id="listaPacientesConteudo">
-    </div>
+     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;"><button id="openProfessionalModal" class="header-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">⚕️</span> <span>Cadastrar Novo Profissional</span> </button> <button id="openPatientModal" class="header-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">👤</span> <span>Cadastrar Novo Paciente</span> </button> <button id="openPatientListModal" class="header-btn" style="background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">📋</span> <span>Ver Lista de Pacientes</span> </button> <button id="exportBtn" class="header-btn export-btn" style="font-size: 16px; padding: 16px 32px; display: flex; align-items: center; gap: 12px;"> <span style="font-size: 24px;">📊</span> <span>Exportar Dados</span> </button>
      </div>
-
      <div id="profissionaisLista" style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px;"><!-- Lista de profissionais será inserida aqui -->
      </div>
-
-
-
-
-
-
-
-     <div id="modalPaciente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div style="background: white; padding: 32px; border-radius: 20px; width: 90%; max-width: 550px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
-        <h2 style="font-size: 22px; font-weight: 700; color: #10b981; margin: 0;">👤 Cadastrar Novo Paciente</h2>
-        <button onclick="fecharModalPaciente()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
-    </div>
-    
-    <form id="patientForm">
-      <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-        <div>
-          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Nome Completo</label>
-          <input type="text" id="pacienteNome" class="form-input" style="width: 100%;" required placeholder="Digite o nome completo">
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Telefone</label>
-                <input type="text" id="pacienteTelefone" class="form-input" style="width: 100%;" required placeholder="(00) 00000-0000">
-            </div>
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Data de Nascimento</label>
-                <input type="date" id="pacienteNascimento" class="form-input" style="width: 100%;">
-            </div>
-        </div>
-
-        <div>
-          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Email (opcional)</label>
-          <input type="email" id="pacienteEmail" class="form-input" style="width: 100%;" placeholder="exemplo@email.com">
-        </div>
-
-        <div>
-          <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #444;">Endereço (opcional)</label>
-          <input type="text" id="pacienteEndereco" class="form-input" style="width: 100%;" placeholder="Rua, número, bairro...">
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px;">
-        <button type="button" onclick="fecharModalPaciente()" style="padding: 12px 20px; background: #f3f4f6; color: #4b5563; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancelar</button>
-        <button type="submit" style="padding: 12px 30px; background: #10b981; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Cadastrar Paciente</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-
-
-
     </div><!-- Form Section -->
     <div class="form-section"><!-- Campo de Valor Inicial do Caixa -->
      <div style="display: flex; gap: 16px; margin-bottom: 24px; justify-content: center; align-items: center; flex-wrap: wrap; background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
@@ -774,7 +492,7 @@ function removerItem(nome) {
        </div>
       </div><button id="btnEditarValorInicial" class="header-btn" style="background: white; color: #10b981; font-size: 14px; padding: 12px 24px; display: flex; align-items: center; gap: 8px; border: 2px solid white; font-weight: 700;"> <span style="font-size: 18px;">✏️</span> <span>Editar Valor Inicial</span> </button>
      </div>
-     <div style="display: flex; gap: 16px; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 16px;"><button id="tabRecebimento" class="tab-btn active" style="flex: 1; padding: 12px 24px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Recebimento </button> <button id="tabDespesa" class="tab-btn" style="flex: 1; padding: 12px 24px; background: #e9ecef; color: #666; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;"> 💸 Despesa </button>
+     <div style="display: flex; gap: 16px; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; padding-bottom: 16px;"><button id="tabRecebimento" class="tab-btn active" style="flex: 1; padding: 12px 24px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;"> 💰 Recebimento </button> <button id="tabDespesa" class="tab-btn" style="flex: 1; padding: 12px 24px; background: #e9ecef; color: #666; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;"> 💸 Despesa </button>
      </div><!-- Formulário de Recebimento -->
      <div id="formRecebimento">
       <h2 class="section-title">Registrar Novo Recebimento</h2>
@@ -790,14 +508,10 @@ function removerItem(nome) {
         </div>
         <div class="form-group"><label for="formaPagamento" class="form-label">Forma de Pagamento</label> <select id="formaPagamento" class="form-select" required> <option value="">Selecione...</option> <option value="unimed">Unimed</option> <option value="cartao">Cartão</option> <option value="pix">PIX</option> <option value="dinheiro">Dinheiro</option> </select>
         </div>
-        
         <div class="form-group"><label for="dataRecebimento" class="form-label">Data</label> <input type="date" id="dataRecebimento" class="form-input" required>
         </div>
        </div><button type="submit" class="submit-btn" id="addButton">Adicionar Recebimento</button>
       </form>
-
-
-
      </div><!-- Formulário de Despesa -->
      <div id="formDespesa" style="display: none;">
       <h2 class="section-title">Registrar Nova Despesa</h2>
@@ -816,8 +530,6 @@ function removerItem(nome) {
        </div><button type="submit" class="submit-btn" style="background: #dc3545;">Adicionar Despesa</button>
       </form>
      </div>
-
-     
     </div><!-- Detail Section -->
     <div class="detail-section">
      <h2 class="section-title">Detalhamento por Conta de Recebimento</h2>
@@ -974,309 +686,80 @@ function removerItem(nome) {
     `;
     document.head.appendChild(style);
     
-    // ====================================
-    // SISTEMA DE ARMAZENAMENTO LOCALSTORAGE
-    // ====================================
-    const STORAGE_KEY = 'centroMedicoCamocim_v100';
-    
+    // Armazenamento de dados no banco Canva
+    let allData = [];
     let profissionais = [];
     let pacientes = [];
     let recebimentos = [];
     let despesas = [];
+    let isInitialized = false;
     let tiposAtendimento = [];
-    let configsCaixaDia = [];
+    let valorInicialCaixa = 0;
     
     // Controle de navegação por dia
-let dataVisualizacaoAtual = new Date().toISOString().split('T')[0];
+    let dataVisualizacaoAtual = new Date().toISOString().split('T')[0];
 
-
-    
-    // Carregar dados do localStorage
-    function carregarDados() {
-      try {
-        const dadosSalvos = localStorage.getItem(STORAGE_KEY);
-        if (dadosSalvos) {
-          const dados = JSON.parse(dadosSalvos);
-          profissionais = dados.profissionais || [];
-          pacientes = dados.pacientes || [];
-          recebimentos = dados.recebimentos || [];
-          despesas = dados.despesas || [];
-          tiposAtendimento = dados.tiposAtendimento || [];
-          configsCaixaDia = dados.configsCaixaDia || [];
-          
-          console.log('✅ Dados carregados do localStorage:', {
-            profissionais: profissionais.length,
-            pacientes: pacientes.length,
-            recebimentos: recebimentos.length,
-            despesas: despesas.length,
-            tiposAtendimento: tiposAtendimento.length,
-            configsCaixaDia: configsCaixaDia.length
-          });
+    // Configuração do Data SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        allData = data;
+        
+        // Separar dados por tipo
+        profissionais = data.filter(d => d.tipo === 'profissional');
+        pacientes = data.filter(d => d.tipo === 'paciente');
+        recebimentos = data.filter(d => d.tipo === 'recebimento');
+        despesas = data.filter(d => d.tipo === 'despesa');
+        tiposAtendimento = data.filter(d => d.tipo === 'tipoAtendimento');
+        
+        // Carregar valor inicial do caixa
+        const configCaixa = data.find(d => d.tipo === 'configCaixa');
+        if (configCaixa) {
+          valorInicialCaixa = configCaixa.valorInicial || 0;
         } else {
-          console.log('📂 Nenhum dado encontrado - iniciando vazio');
+          valorInicialCaixa = 0;
         }
-      } catch (error) {
-        console.error('❌ Erro ao carregar dados:', error);
-      }
-    }
-    
-    // Salvar dados no localStorage
-    function salvarDados() {
-      try {
-        const dados = {
-          profissionais,
-          pacientes,
-          recebimentos,
-          despesas,
-          tiposAtendimento,
-          configsCaixaDia,
-          versao: '1.0.0',
-          ultimaAtualizacao: new Date().toISOString()
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
-        console.log('💾 Dados salvos no localStorage');
-      } catch (error) {
-        console.error('❌ Erro ao salvar dados:', error);
-        mostrarMensagem('❌ Erro ao salvar dados', 'error');
-      }
-    }
-
-
-
-
-
-
-
-    // Abrir Modal de Paciente// Funções de Controle do Modal de Paciente
-function abrirModalPaciente() {
-    // Garante que o modal de profissional esteja fechado para não abrir os dois
-    const modalProf = document.getElementById('modalProfissional');
-    if(modalProf) modalProf.style.display = 'none';
-    
-    document.getElementById('modalPaciente').style.display = 'flex';
-}
-
-function fecharModalPaciente() {
-    document.getElementById('modalPaciente').style.display = 'none';
-    document.getElementById('patientForm').reset();
-}
-
-// Evento do Botão de Abrir (Corrigido para chamar a função específica)
-document.getElementById('openPatientModal').onclick = function(e) {
-    e.preventDefault();
-    e.stopPropagation(); // Evita que o evento suba para outros elementos
-    abrirModalPaciente();
-};
-
-// Lógica de Salvar com novos campos
-document.getElementById('patientForm').onsubmit = function(e) {
-    e.preventDefault();
-    
-    const novoPaciente = {
-        id: Date.now(),
-        nome: document.getElementById('pacienteNome').value,
-        telefone: document.getElementById('pacienteTelefone').value,
-        email: document.getElementById('pacienteEmail').value,
-        endereco: document.getElementById('pacienteEndereco').value,
-        nascimento: document.getElementById('pacienteNascimento').value,
-        dataCadastro: new Date().toISOString()
-    };
-
-    pacientes.push(novoPaciente);
-    salvarDados(); // Função já existente no seu arquivo teste.html
-    
-    fecharModalPaciente();
-    mostrarMensagem('✅ Paciente ' + novoPaciente.nome + ' cadastrado com sucesso!');
-};
-
-
-
-
-
-
-
-    
-    // Função auxiliar para mostrar mensagens
-    function mostrarMensagem(texto, tipo = 'success') {
-      const cores = {
-        success: '#10b981',
-        error: '#dc3545',
-        warning: '#f59e0b',
-        info: '#0ea5e9'
-      };
-      
-      const messageDiv = document.createElement('div');
-      messageDiv.textContent = texto;
-      messageDiv.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${cores[tipo]}; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000; font-weight: 600;`;
-      document.body.appendChild(messageDiv);
-      setTimeout(() => messageDiv.remove(), 3000);
-    }
-    
-    // Exportar dados para arquivo JSON
-    window.exportarDadosParaArquivo = function() {
-      try {
-        const dados = {
-          profissionais,
-          pacientes,
-          recebimentos,
-          despesas,
-          tiposAtendimento,
-          configsCaixaDia,
-          versao: '1.0.0',
-          dataExportacao: new Date().toISOString()
-        };
         
-        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `centro-medico-backup-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        mostrarMensagem('✅ Dados exportados com sucesso!', 'success');
-      } catch (error) {
-        console.error('Erro ao exportar:', error);
-        mostrarMensagem('❌ Erro ao exportar dados', 'error');
-      }
-    };
-    
-    // Importar dados de arquivo JSON
-    // O modelo ACUMULATIVO:
-function importarDadosDeArquivo(input) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const dadosImportados = JSON.parse(e.target.result);
-            
-            // 1. Acumular Profissionais (evitando duplicados pelo nome)
-            if (dadosImportados.profissionais) {
-                dadosImportados.profissionais.forEach(novoProf => {
-                    const jaExiste = profissionais.find(p => p.nome === novoProf.nome);
-                    if (!jaExiste) profissionais.push(novoProf);
-                });
-            }
-
-            // 2. Acumular Pacientes (evitando duplicados pelo ID ou nome)
-            if (dadosImportados.pacientes) {
-                dadosImportados.pacientes.forEach(novoPac => {
-                    const jaExiste = pacientes.find(p => p.nome === novoPac.nome);
-                    if (!jaExiste) pacientes.push(novoPac);
-                });
-            }
-
-            // 3. Acumular Recebimentos e Despesas (Geralmente adiciona tudo)
-            if (dadosImportados.recebimentos) {
-                recebimentos.push(...dadosImportados.recebimentos);
-            }
-            if (dadosImportados.despesas) {
-                despesas.push(...dadosImportados.despesas);
-            }
-
-            // Salva no LocalStorage e atualiza a tela
-            salvarDados();
-            location.reload(); // Recarrega para garantir que os gráficos e tabelas processem tudo
-            alert("✅ Dados importados e acumulados com sucesso!");
-
-        } catch (error) {
-            console.error("Erro na importação:", error);
-            alert("❌ Erro ao processar o arquivo.");
+        // Atualizar interface apenas se já inicializou
+        if (isInitialized) {
+          renderProfissionaisList();
+          atualizarCalendarioNavegacao();
+          updateDashboard();
+          atualizarSelectTiposAtendimento();
+          atualizarDisplayValorInicial();
         }
+      }
     };
-    reader.readAsText(input.files[0]);
-}
 
-
-
-    
-    // Limpar todos os dados
-    window.limparTodosDados = function() {
-      const confirmDiv = document.createElement('div');
-      confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
-      confirmDiv.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ ATENÇÃO!</h3>
-        <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja <strong style="color: #dc3545;">APAGAR TODOS OS DADOS</strong>?<br><br>Esta ação não pode ser desfeita!</p>
-        <div style="display: flex; gap: 12px; justify-content: center;">
-          <button id="confirmClear" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Limpar Tudo</button>
-          <button id="cancelClear" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-        </div>
-      `;
-      
-      const backdrop = document.createElement('div');
-      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
-      
-      document.body.appendChild(backdrop);
-      document.body.appendChild(confirmDiv);
-      
-      document.getElementById('cancelClear').addEventListener('click', () => {
-        backdrop.remove();
-        confirmDiv.remove();
-      });
-      
-      document.getElementById('confirmClear').addEventListener('click', () => {
-        profissionais = [];
-        pacientes = [];
-        recebimentos = [];
-        despesas = [];
-        tiposAtendimento = [];
-        configsCaixaDia = [];
-        
-        localStorage.removeItem(STORAGE_KEY);
-        atualizarInterface();
-        
-        backdrop.remove();
-        confirmDiv.remove();
-        
-        mostrarMensagem('🗑️ Todos os dados foram apagados!', 'success');
-      });
-    };
-    
-    // Função para atualizar toda a interface
-    function atualizarInterface() {
-      renderProfissionaisList();
-      atualizarCalendarioNavegacao();
-      updateDashboard();
-      atualizarSelectTiposAtendimento();
-      atualizarDisplayValorInicial();
-    }
-    
-    // Inicializar aplicação
-    carregarDados();
-    atualizarInterface();
-    
-    // Função para atualizar display do valor inicial (por dia)
-    function atualizarDisplayValorInicial() {
-      // Buscar o valor inicial específico para o dia selecionado
-      const configDia = configsCaixaDia.find(c => c.data === dataVisualizacaoAtual);
-      
-      if (configDia) {
-        // Se existe valor para este dia, usar ele
-        document.getElementById('displayValorInicial').textContent = `R$ ${configDia.valorInicial.toFixed(2)}`;
+    // Inicializar SDK
+    async function initializeApp() {
+      const result = await window.dataSdk.init(dataHandler);
+      if (result.isOk) {
+        isInitialized = true;
+        renderProfissionaisList();
+        atualizarCalendarioNavegacao();
+        updateDashboard();
+        atualizarSelectTiposAtendimento();
+        atualizarDisplayValorInicial();
+        setDataAtualEmTodosCampos();
       } else {
-        // Se não existe, mostrar R$ 0,00
-        document.getElementById('displayValorInicial').textContent = 'R$ 0,00';
+        console.error('Erro ao inicializar Data SDK');
       }
     }
+
+    initializeApp();
     
-    // Função para obter valor inicial do dia atual
-    function getValorInicialDiaAtual() {
-      const configDia = configsCaixaDia.find(c => c.data === dataVisualizacaoAtual);
-      return configDia ? configDia.valorInicial : 0;
+    // Função para atualizar display do valor inicial
+    function atualizarDisplayValorInicial() {
+      document.getElementById('displayValorInicial').textContent = `R$ ${valorInicialCaixa.toFixed(2)}`;
     }
     
-    // Botão para editar valor inicial do caixa (por dia)
-    document.getElementById('btnEditarValorInicial').addEventListener('click', () => {
-      const valorAtualDia = getValorInicialDiaAtual();
-      
+    // Botão para editar valor inicial do caixa
+    document.getElementById('btnEditarValorInicial').addEventListener('click', async () => {
       const modalBackdrop = document.createElement('div');
       modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
       
       const modalContent = document.createElement('div');
       modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 500px; width: 90%;';
-      
-      const dataFormatada = new Date(dataVisualizacaoAtual + 'T12:00:00').toLocaleDateString('pt-BR');
       
       modalContent.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
@@ -1284,20 +767,15 @@ function importarDadosDeArquivo(input) {
           <button id="closeValorInicialModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
         </div>
         
-        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 2px solid #dee2e6;">
-          <div style="font-size: 13px; color: #666; margin-bottom: 4px; font-weight: 600;">📅 Data Selecionada</div>
-          <div style="font-size: 18px; font-weight: 700; color: #333;">${dataFormatada}</div>
-        </div>
-        
         <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; color: white; margin-bottom: 24px; text-align: center;">
-          <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Valor Atual deste Dia</div>
-          <div style="font-size: 32px; font-weight: 700;">R$ ${valorAtualDia.toFixed(2)}</div>
+          <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Valor Atual</div>
+          <div style="font-size: 32px; font-weight: 700;">R$ ${valorInicialCaixa.toFixed(2)}</div>
         </div>
         
         <form id="formValorInicial">
           <div style="margin-bottom: 24px;">
-            <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">Novo Valor Inicial para este Dia (R$)</label>
-            <input type="number" id="novoValorInicial" step="0.01" min="0" value="${valorAtualDia}" placeholder="Ex: 100.00" required style="padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 16px; width: 100%; font-weight: 600;">
+            <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #333;">Novo Valor Inicial (R$)</label>
+            <input type="number" id="novoValorInicial" step="0.01" min="0" value="${valorInicialCaixa}" placeholder="Ex: 100.00" required style="padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 16px; width: 100%; font-weight: 600;">
           </div>
           
           <button type="submit" style="padding: 14px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s;">
@@ -1319,28 +797,41 @@ function importarDadosDeArquivo(input) {
         }
       });
       
-      document.getElementById('formValorInicial').addEventListener('submit', (e) => {
+      document.getElementById('formValorInicial').addEventListener('submit', async (e) => {
         e.preventDefault();
         const novoValor = parseFloat(document.getElementById('novoValorInicial').value);
         
-        // Verificar se já existe configuração de caixa para este dia
-        const configIndex = configsCaixaDia.findIndex(c => c.data === dataVisualizacaoAtual);
+        // Verificar se já existe configuração de caixa
+        const configExistente = allData.find(d => d.tipo === 'configCaixa');
         
-        if (configIndex >= 0) {
+        if (configExistente) {
           // Atualizar
-          configsCaixaDia[configIndex].valorInicial = novoValor;
+          configExistente.valorInicial = novoValor;
+          const result = await window.dataSdk.update(configExistente);
+          
+          if (result.isOk) {
+            const successDiv = document.createElement('div');
+            successDiv.textContent = `✅ Valor inicial atualizado para R$ ${novoValor.toFixed(2)}!`;
+            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+          }
         } else {
           // Criar novo
-          configsCaixaDia.push({
-            data: dataVisualizacaoAtual,
+          const result = await window.dataSdk.create({
+            tipo: 'configCaixa',
             valorInicial: novoValor
           });
+          
+          if (result.isOk) {
+            const successDiv = document.createElement('div');
+            successDiv.textContent = `✅ Valor inicial definido como R$ ${novoValor.toFixed(2)}!`;
+            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+          }
         }
         
-        salvarDados();
-        atualizarDisplayValorInicial();
-        
-        mostrarMensagem(`✅ Valor inicial de ${dataFormatada} atualizado para R$ ${novoValor.toFixed(2)}!`, 'success');
         modalBackdrop.remove();
       });
     });
@@ -1382,13 +873,6 @@ function importarDadosDeArquivo(input) {
         btnProximoDia.style.opacity = '1';
         btnProximoDia.style.cursor = 'pointer';
       }
-      
-      // Atualizar campo de data nos formulários
-      document.getElementById('dataRecebimento').value = dataVisualizacaoAtual;
-      document.getElementById('dataDespesa').value = dataVisualizacaoAtual;
-      
-      // Atualizar valor inicial do caixa para este dia
-      atualizarDisplayValorInicial();
       
       // Atualizar resumo do dia
       atualizarResumoDia();
@@ -1614,8 +1098,34 @@ function importarDadosDeArquivo(input) {
         return listaPadrao + listaCustomizada;
       };
       
+      modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">⚙️ Gerenciar Tipos de Atendimento</h2>
+          <button id="closeTiposModal" style="background: #e9ecef; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
+        </div>
+        
+        <div id="listaTiposContainer">
+          ${renderListaTipos()}
+        </div>
+        
+        <div style="border-top: 2px solid #e9ecef; padding-top: 24px; margin-top: 24px;">
+          <h3 style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 16px;">➕ Adicionar Novo Tipo</h3>
+          <form id="formNovoTipo">
+            <div style="display: flex; gap: 12px;">
+              <input type="text" id="novoTipoNome" placeholder="Ex: Exame, Avaliação, Terapia..." required style="flex: 1; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif;">
+              <button type="submit" style="padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s; white-space: nowrap;">Adicionar</button>
+            </div>
+          </form>
+        </div>
+      `;
       
+      modalBackdrop.appendChild(modalContent);
+      document.body.appendChild(modalBackdrop);
       
+      // Fechar modal
+      document.getElementById('closeTiposModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
       
       modalBackdrop.addEventListener('click', (e) => {
         if (e.target === modalBackdrop) {
@@ -1719,66 +1229,6 @@ function importarDadosDeArquivo(input) {
       const modalBackdrop = document.createElement('div');
       modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
       
-      
-      
-      modalBackdrop.appendChild(modalContent);
-      document.body.appendChild(modalBackdrop);
-      
-      document.getElementById('closePatientModal').addEventListener('click', () => {
-        modalBackdrop.remove();
-      });
-      
-      modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) {
-          modalBackdrop.remove();
-        }
-      });
-      
-      document.getElementById('patientForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Cadastrando...';
-        
-        const nome = document.getElementById('pacienteNome').value.trim();
-        const telefone = document.getElementById('pacienteTelefone').value.trim();
-        const email = document.getElementById('pacienteEmail').value.trim();
-        const endereco = document.getElementById('pacienteEndereco').value.trim();
-        const dataNascimento = document.getElementById('pacienteDataNascimento').value;
-        
-        if (!nome || !telefone) {
-          const messageDiv = document.createElement('div');
-          messageDiv.textContent = ' Por favor, preencha nome e telefone';
-          messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
-          document.body.appendChild(messageDiv);
-          setTimeout(() => messageDiv.remove(), 3000);
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Cadastrar Paciente';
-          return;
-        }
-        
-        const result = await window.dataSdk.create({
-          tipo: 'paciente',
-          nome: nome,
-          telefone: telefone,
-          email: email,
-          endereco: endereco,
-          dataNascimento: dataNascimento,
-          dataCadastro: new Date().toISOString()
-        });
-        
-        // Dentro do seu Event Listener de submissão:
-submitBtn.addEventListener('click', async (e) => {
-    e.preventDefault(); // Impede o recarregamento da página
-
-
-
-
-    document.getElementById('openPatientModal').addEventListener('click', () => {
-      const modalBackdrop = document.createElement('div');
-      modalBackdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1999; display: flex; align-items: center; justify-content: center;';
-      
       const modalContent = document.createElement('div');
       modalContent.style.cssText = 'background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 600px; width: 90%; max-height: 90%; overflow-y: auto;';
       
@@ -1810,6 +1260,11 @@ submitBtn.addEventListener('click', async (e) => {
               <input type="text" id="pacienteEndereco" class="form-input" placeholder="Ex: Rua das Flores, 123">
             </div>
             
+            <div class="form-group">
+              <label for="pacienteDataNascimento" class="form-label">Data de Nascimento (opcional)</label>
+              <input type="date" id="pacienteDataNascimento" class="form-input">
+            </div>
+            
             <button type="submit" class="submit-btn" style="width: 100%; margin-top: 8px;">
               Cadastrar Paciente
             </button>
@@ -1820,134 +1275,66 @@ submitBtn.addEventListener('click', async (e) => {
       modalBackdrop.appendChild(modalContent);
       document.body.appendChild(modalBackdrop);
       
-      document.getElementById('closePatientModal').addEventListener('click', () => modalBackdrop.remove());
+      document.getElementById('closePatientModal').addEventListener('click', () => {
+        modalBackdrop.remove();
+      });
       
       modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) modalBackdrop.remove();
+        if (e.target === modalBackdrop) {
+          modalBackdrop.remove();
+        }
       });
       
       document.getElementById('patientForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Cadastrando...';
+        
         const nome = document.getElementById('pacienteNome').value.trim();
         const telefone = document.getElementById('pacienteTelefone').value.trim();
-
-        // 1. Estado de carregamento
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Salvando...';
+        const email = document.getElementById('pacienteEmail').value.trim();
+        const endereco = document.getElementById('pacienteEndereco').value.trim();
+        const dataNascimento = document.getElementById('pacienteDataNascimento').value;
         
-        try {
-          // 2. Lógica de Salvamento Local (Usando suas funções existentes)
-          const novoPaciente = {
-            id: Date.now(),
-            nome: nome,
-            telefone: telefone,
-            email: document.getElementById('pacienteEmail').value,
-            endereco: document.getElementById('pacienteEndereco').value,
-            dataCadastro: new Date().toISOString()
-          };
-
-          // Adiciona ao array global do seu sistema
-          pacientes.push(novoPaciente);
-          
-          // Chama a função que já existe no seu teste.html para salvar no navegador
-          salvarDados(); 
-          
-          // 3. Feedback de Sucesso
+        if (!nome || !telefone) {
+          const messageDiv = document.createElement('div');
+          messageDiv.textContent = '⚠️ Por favor, preencha nome e telefone';
+          messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(messageDiv);
+          setTimeout(() => messageDiv.remove(), 3000);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Paciente';
+          return;
+        }
+        
+        const result = await window.dataSdk.create({
+          tipo: 'paciente',
+          nome: nome,
+          telefone: telefone,
+          email: email,
+          endereco: endereco,
+          dataNascimento: dataNascimento,
+          dataCadastro: new Date().toISOString()
+        });
+        
+        if (result.isOk) {
           const successDiv = document.createElement('div');
           successDiv.textContent = `✅ ${nome} cadastrado com sucesso!`;
           successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
           document.body.appendChild(successDiv);
           setTimeout(() => successDiv.remove(), 3000);
-          
-          modalBackdrop.remove(); // Fecha o modal
-
-        } catch (error) {
-          console.error("Erro ao salvar:", error);
-          alert("Erro ao salvar paciente localmente.");
-        } finally {
-          // 4. SEMPRE reabilita o botão para não travar
+          modalBackdrop.remove();
+        } else {
+          const errorDiv = document.createElement('div');
+          errorDiv.textContent = '❌ Erro ao cadastrar paciente';
+          errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(errorDiv);
+          setTimeout(() => errorDiv.remove(), 3000);
           submitBtn.disabled = false;
           submitBtn.textContent = 'Cadastrar Paciente';
         }
-      });
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    const nome = document.getElementById('nome')?.value; // Ajuste o ID conforme seu HTML
-    const telefone = document.getElementById('telefone')?.value;
-
-    // 1. Validação Inicial
-    if (!nome || !telefone) {
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = '⚠️ Por favor, preencha nome e telefone';
-        messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
-        document.body.appendChild(messageDiv);
-        setTimeout(() => messageDiv.remove(), 3000);
-        
-        // Garante que o botão volte se houver erro de validação
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Cadastrar Paciente';
-        return;
-    }
-
-    // Estado de carregamento
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Carregando...';
-
-    
-    try {
-        // 2. Lógica para salvar no LocalStorage
-        const pacientes = JSON.parse(localStorage.getItem('pacientes') || '[]');
-        const novoPaciente = { nome, telefone, data: new Date().toISOString() };
-        pacientes.push(novoPaciente);
-        localStorage.setItem('pacientes', JSON.stringify(pacientes));
-
-        // Simula o objeto de resultado que seu código espera
-        const result = { isOk: true };
-
-        // 3. Feedback de Sucesso
-        if (result.isOk) {
-            const successDiv = document.createElement('div');
-            successDiv.textContent = `✅ ${nome} cadastrado com sucesso!`;
-            successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
-            document.body.appendChild(successDiv);
-            setTimeout(() => successDiv.remove(), 3000);
-            
-            // Fechar modal se existir
-            if (typeof modalBackdrop !== 'undefined') modalBackdrop.remove();
-            
-            // Opcional: Limpar campos
-            // form.reset();
-        }
-    } catch (error) {
-        // 4. Tratamento de Erro Crítico
-        console.error("Erro ao salvar:", error);
-        const errorDiv = document.createElement('div');
-        errorDiv.textContent = '❌ Erro ao cadastrar paciente';
-        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
-        document.body.appendChild(errorDiv);
-        setTimeout(() => errorDiv.remove(), 3000);
-    } finally {
-        // 5. IMPORTANTE: Reabilita o botão independente de ter dado certo ou errado
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Cadastrar Paciente';
-    }
-});
       });
     });
     
@@ -1993,10 +1380,6 @@ submitBtn.addEventListener('click', async (e) => {
       modalContent.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
           <h2 style="margin: 0; color: #333; font-size: 24px; font-weight: 700;">📋 Lista de Pacientes (${pacientes.length})</h2>
-          
-          
-
-
           <button id="closePatientListModal" style="background: #e9ecef; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">×</button>
         </div>
         
@@ -2164,7 +1547,7 @@ submitBtn.addEventListener('click', async (e) => {
       });
       
       // Submeter formulário
-      document.getElementById('professionalForm').addEventListener('submit', (e) => {
+      document.getElementById('professionalForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -2177,7 +1560,11 @@ submitBtn.addEventListener('click', async (e) => {
         
         // Validar se escolheu Sim ou Não
         if (temPorcentagem === null) {
-          mostrarMensagem('⚠️ Por favor, escolha se o profissional tem porcentagem (Sim ou Não)', 'warning');
+          const messageDiv = document.createElement('div');
+          messageDiv.textContent = '⚠️ Por favor, escolha se o profissional tem porcentagem (Sim ou Não)';
+          messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(messageDiv);
+          setTimeout(() => messageDiv.remove(), 3000);
           submitBtn.disabled = false;
           submitBtn.textContent = 'Cadastrar Profissional';
           return;
@@ -2191,7 +1578,11 @@ submitBtn.addEventListener('click', async (e) => {
           porcentagem = parseInt(porcentagemInput);
           
           if (!porcentagemInput || isNaN(porcentagem) || porcentagem < 0 || porcentagem > 100) {
-            mostrarMensagem('⚠️ Por favor, preencha a porcentagem corretamente (0 a 100)', 'warning');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = '⚠️ Por favor, preencha a porcentagem corretamente (0 a 100)';
+            messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+            document.body.appendChild(messageDiv);
+            setTimeout(() => messageDiv.remove(), 3000);
             submitBtn.disabled = false;
             submitBtn.textContent = 'Cadastrar Profissional';
             return;
@@ -2202,14 +1593,18 @@ submitBtn.addEventListener('click', async (e) => {
         }
         
         if (!nome) {
-          mostrarMensagem('⚠️ Por favor, preencha o nome do profissional', 'warning');
+          const messageDiv = document.createElement('div');
+          messageDiv.textContent = '⚠️ Por favor, preencha o nome do profissional';
+          messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(messageDiv);
+          setTimeout(() => messageDiv.remove(), 3000);
           submitBtn.disabled = false;
           submitBtn.textContent = 'Cadastrar Profissional';
           return;
         }
         
-        profissionais.push({
-          id: Date.now().toString(),
+        const result = await window.dataSdk.create({
+          tipo: 'profissional',
           nome: nome,
           profissao: profissao,
           telefone: telefone,
@@ -2217,13 +1612,22 @@ submitBtn.addEventListener('click', async (e) => {
           dataCadastro: new Date().toISOString()
         });
         
-        salvarDados();
-        renderProfissionaisList();
-        updateProfissionalSelect();
-        updateProfissionaisDetalhamento();
-        
-        mostrarMensagem(`✅ ${nome} cadastrado com sucesso!`, 'success');
-        modalBackdrop.remove();
+        if (result.isOk) {
+          const successDiv = document.createElement('div');
+          successDiv.textContent = `✅ ${nome} cadastrado com sucesso!`;
+          successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(successDiv);
+          setTimeout(() => successDiv.remove(), 3000);
+          modalBackdrop.remove();
+        } else {
+          const errorDiv = document.createElement('div');
+          errorDiv.textContent = '❌ Erro ao cadastrar profissional';
+          errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+          document.body.appendChild(errorDiv);
+          setTimeout(() => errorDiv.remove(), 3000);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Cadastrar Profissional';
+        }
       });
     });
     
@@ -2738,7 +2142,7 @@ submitBtn.addEventListener('click', async (e) => {
       });
       
       if (recebimentosDia.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #999;"> Nenhum recebimento registrado para este dia</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #999;">📋 Nenhum recebimento registrado para este dia</td></tr>';
         return;
       }
       
@@ -2752,50 +2156,26 @@ submitBtn.addEventListener('click', async (e) => {
           <td>${rec.formaPagamento}</td>
           <td style="color: #dc3545; font-weight: 600;">R$ ${rec.valorProfissional.toFixed(2)}</td>
           <td class="value-liquido">R$ ${rec.valorLiquido.toFixed(2)}</td>
-          <td><button class="action-btn" onclick="removerRecebimento('${rec.id}')">Excluir</button></td>
+          <td><button class="action-btn" onclick="removerRecebimentoDB('${rec.__backendId}')">Excluir</button></td>
         </tr>
       `).join('');
     }
 
-    window.removerRecebimento = function(id) {
-      const index = recebimentos.findIndex(r => r.id === id);
-      if (index === -1) return;
+    window.removerRecebimentoDB = async function(backendId) {
+      const recebimento = recebimentos.find(r => r.__backendId === backendId);
+      if (!recebimento) return;
       
-      const recebimento = recebimentos[index];
-      
-      const confirmDiv = document.createElement('div');
-      confirmDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 2001; text-align: center; max-width: 400px;';
-      confirmDiv.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; color: #333;">⚠️ Confirmar Exclusão</h3>
-        <p style="margin: 0 0 24px 0; color: #666;">Tem certeza que deseja excluir este recebimento de R$ ${recebimento.valorBruto.toFixed(2)}?</p>
-        <div style="display: flex; gap: 12px; justify-content: center;">
-          <button id="confirmRemove" style="padding: 12px 24px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Sim, Excluir</button>
-          <button id="cancelRemove" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-        </div>
-      `;
-      
-      const backdrop = document.createElement('div');
-      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;';
-      
-      document.body.appendChild(backdrop);
-      document.body.appendChild(confirmDiv);
-      
-      document.getElementById('cancelRemove').addEventListener('click', () => {
-        backdrop.remove();
-        confirmDiv.remove();
-      });
-      
-      document.getElementById('confirmRemove').addEventListener('click', () => {
-        recebimentos.splice(index, 1);
-        salvarDados();
-        updateDashboard();
-        mostrarMensagem('🗑️ Recebimento excluído!', 'success');
-        backdrop.remove();
-        confirmDiv.remove();
-      });
+      const result = await window.dataSdk.delete(recebimento);
+      if (result.isOk) {
+        const successDiv = document.createElement('div');
+        successDiv.textContent = '🗑️ Recebimento excluído!';
+        successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;';
+        document.body.appendChild(successDiv);
+        setTimeout(() => successDiv.remove(), 3000);
+      }
     };
 
-    document.getElementById('receiptForm').addEventListener('submit', (e) => {
+    document.getElementById('receiptForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const submitBtn = document.getElementById('addButton');
@@ -2810,7 +2190,11 @@ submitBtn.addEventListener('click', async (e) => {
       const dataRecebimento = document.getElementById('dataRecebimento').value;
       
       if (!valorBruto || isNaN(profissionalIndex) || !tipoAtendimento || !formaPagamento || !dataRecebimento) {
-        mostrarMensagem('⚠️ Por favor, preencha todos os campos', 'warning');
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = 'Por favor, preencha todos os campos';
+        messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(messageDiv);
+        setTimeout(() => messageDiv.remove(), 3000);
         submitBtn.disabled = false;
         submitBtn.textContent = 'Adicionar Recebimento';
         return;
@@ -2832,9 +2216,8 @@ submitBtn.addEventListener('click', async (e) => {
         valorLiquido = valorBruto - valorProfissional;
       }
       
-      // Adicionar recebimento ao array local
-      recebimentos.push({
-        id: Date.now().toString(),
+      const result = await window.dataSdk.create({
+        tipo: 'recebimento',
         valorBruto: valorBruto,
         valorLiquido: valorLiquido,
         valorProfissional: valorProfissional,
@@ -2845,21 +2228,95 @@ submitBtn.addEventListener('click', async (e) => {
         data: new Date(dataRecebimento + 'T' + new Date().toTimeString().slice(0, 5)).toISOString()
       });
       
-      // Salvar no localStorage
-      salvarDados();
-      
-      // Atualizar interface
-      updateDashboard();
-      
-      mostrarMensagem(`✅ Recebimento de R$ ${valorBruto.toFixed(2)} para ${prof.nome} adicionado!`, 'success');
-      
-      const dataAtual = document.getElementById('dataRecebimento').value;
-      document.getElementById('receiptForm').reset();
-      document.getElementById('dataRecebimento').value = dataAtual;
+      if (result.isOk) {
+        const successDiv = document.createElement('div');
+        successDiv.textContent = `✅ Recebimento de R$ ${valorBruto.toFixed(2)} para ${prof.nome} adicionado!`;
+        successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(successDiv);
+        setTimeout(() => successDiv.remove(), 3000);
+        
+        const dataAtual = document.getElementById('dataRecebimento').value;
+        document.getElementById('receiptForm').reset();
+        document.getElementById('dataRecebimento').value = dataAtual;
+      } else {
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = '❌ Erro ao salvar recebimento';
+        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+      }
       
       submitBtn.disabled = false;
       submitBtn.textContent = 'Adicionar Recebimento';
     });
+
+    // Botão Exportar Dados
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      if (recebimentos.length === 0 && despesas.length === 0) {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = '⚠️ Não há dados para exportar';
+        messageDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+        document.body.appendChild(messageDiv);
+        setTimeout(() => messageDiv.remove(), 3000);
+        return;
+      }
+      
+      // Preparar CSV dos recebimentos
+      let csvRecebimentos = 'RECEBIMENTOS\n';
+      csvRecebimentos += 'Data,Hora,Profissional,Valor Bruto,Tipo Atendimento,Forma Pagamento,Valor Profissional,Valor Clínica\n';
+      
+      recebimentos.forEach(r => {
+        const data = new Date(r.data);
+        const dataFormatada = data.toLocaleDateString('pt-BR');
+        const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        csvRecebimentos += `${dataFormatada},${horaFormatada},${r.profissionalNome},${r.valorBruto.toFixed(2)},${r.tipoAtendimento},${r.formaPagamento},${r.valorProfissional.toFixed(2)},${r.valorLiquido.toFixed(2)}\n`;
+      });
+      
+      // Preparar CSV das despesas
+      let csvDespesas = '\n\nDESPESAS\n';
+      csvDespesas += 'Data,Hora,Categoria,Descrição,Valor,Forma Pagamento\n';
+      
+      despesas.forEach(d => {
+        const data = new Date(d.data);
+        const dataFormatada = data.toLocaleDateString('pt-BR');
+        const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        csvDespesas += `${dataFormatada},${horaFormatada},${d.categoria},${d.descricao},${d.valor.toFixed(2)},${d.formaPagamento}\n`;
+      });
+      
+      // Preparar resumo
+      const totalBruto = recebimentos.reduce((sum, r) => sum + r.valorBruto, 0);
+      const totalLiquido = recebimentos.reduce((sum, r) => sum + r.valorLiquido, 0);
+      const totalDespesas = despesas.reduce((sum, d) => sum + d.valor, 0);
+      
+      let csvResumo = '\n\nRESUMO GERAL\n';
+      csvResumo += `Total Bruto Recebido,${totalBruto.toFixed(2)}\n`;
+      csvResumo += `Total Líquido Clínica,${totalLiquido.toFixed(2)}\n`;
+      csvResumo += `Total Despesas,${totalDespesas.toFixed(2)}\n`;
+      csvResumo += `Saldo Final,${(totalLiquido - totalDespesas + valorInicialCaixa).toFixed(2)}\n`;
+      
+      const csvCompleto = csvRecebimentos + csvDespesas + csvResumo;
+      
+      // Criar arquivo para download
+      const blob = new Blob([csvCompleto], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `relatorio_financeiro_${dataAtual}.csv`);
+      link.style.visibility = 'hidden';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      const successDiv = document.createElement('div');
+      successDiv.textContent = '✅ Dados exportados com sucesso!';
+      successDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 3000;';
+      document.body.appendChild(successDiv);
+      setTimeout(() => successDiv.remove(), 3000);
+    });
+
 
     // Função para renderizar gráfico de pizza (Pagamento) - MÊS COMPLETO
     function renderChartPagamento() {
@@ -2879,7 +2336,7 @@ submitBtn.addEventListener('click', async (e) => {
       });
       
       if (recebimentosMes.length === 0) {
-        container.innerHTML = '<div style="text-align: center; color: #999; font-size: 16px;"> Nenhum recebimento neste mês</div>';
+        container.innerHTML = '<div style="text-align: center; color: #999; font-size: 16px;">📊 Nenhum recebimento neste mês</div>';
         return;
       }
       
@@ -2962,7 +2419,7 @@ submitBtn.addEventListener('click', async (e) => {
     function renderChartProfissional() {
       const container = document.getElementById('chartProfissional');
       
-      // Obter mês e ano da data de visualizão atual
+      // Obter mês e ano da data de visualização atual
       const dataVizObj = new Date(dataVisualizacaoAtual + 'T12:00:00');
       const mesAtual = dataVizObj.getMonth();
       const anoAtual = dataVizObj.getFullYear();
@@ -3070,188 +2527,14 @@ submitBtn.addEventListener('click', async (e) => {
       e.target.value = 'R$ ' + value.replace('.', ',');
     });
     
-
+    // Definir data atual em todos os campos de data
+    function setDataAtualEmTodosCampos() {
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('dataRecebimento').value = hoje;
+      document.getElementById('dataDespesa').value = hoje;
+    }
     
     // TODO: Adicionar restante das funcionalidades (pacientes, export, etc)
-
-// ==========================================
-// SISTEMA DE GERENCIAMENTO DE ATENDIMENTOS
-// ==========================================
-
-// ==========================================
-// SISTEMA DE GERENCIAMENTO DE ATENDIMENTOS (CORRIGIDO)
-// ==========================================
-
-document.getElementById('gerenciarAtendimentos').onclick = function(e) {
-    e.preventDefault();
-    
-    // 1. Garante que a lista de tipos existe. Se estiver vazia ou nula, cria padrão.
-    // Nota: A estrutura do seu sistema usa objetos {nome: 'X', valor: 'x'}, mas o código simplificado usava strings.
-    // Vamos padronizar para objetos para compatibilidade com o resto do seu código.
-    if (!tiposAtendimento || tiposAtendimento.length === 0) {
-        tiposAtendimento = [
-             { nome: 'Consulta', valor: 'consulta' },
-             { nome: 'Procedimento', valor: 'procedimento' },
-             { nome: 'Retorno', valor: 'retorno' },
-             { nome: 'Cirurgia', valor: 'cirurgia' }
-        ];
-        salvarDados();
-    }
-
-    // 2. Renderiza o Modal
-    const modalGerenciarHTML = `
-        <div id="modalGerenciarTipos" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
-            <div style="background: white; padding: 24px; border-radius: 16px; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h3 style="margin: 0; color: #333; font-weight: 700; font-size: 18px;">⚙️ Gerenciar Tipos</h3>
-                    <button type="button" onclick="document.getElementById('modalGerenciarTipos').remove()" style="cursor: pointer; background: #f1f3f5; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #666;">&times;</button>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 24px;">
-                    <input type="text" id="inputNovoTipo" placeholder="Novo tipo (ex: Exame)" style="flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; outline: none; transition: border 0.2s;">
-                    <button type="button" id="btnConfirmarAdd" style="background: #10b981; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">Add</button>
-                </div>
-
-                <div style="margin-bottom: 10px; font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600;">Tipos Cadastrados</div>
-                <div id="listaItensTipos" style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
-                    ${tiposAtendimento.map((tipo, i) => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e9ecef;">
-                            <span style="font-size: 14px; color: #333; font-weight: 500;">${tipo.nome || tipo}</span>
-                            <button type="button" onclick="removerTipoAtendimentoLocal(${i})" style="color: #dc3545; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600;">Excluir</button>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Remove modal anterior se existir (evita duplicação)
-    const modalAntigo = document.getElementById('modalGerenciarTipos');
-    if (modalAntigo) modalAntigo.remove();
-
-    document.body.insertAdjacentHTML('beforeend', modalGerenciarHTML);
-
-    // Foco no input
-    document.getElementById('inputNovoTipo').focus();
-
-    // Ação do Botão Adicionar
-    document.getElementById('btnConfirmarAdd').onclick = function() {
-        const nome = document.getElementById('inputNovoTipo').value.trim();
-        if (nome) {
-            // Adiciona no formato correto de objeto
-            const valorSlug = nome.toLowerCase().replace(/ /g, '_');
-            tiposAtendimento.push({ nome: nome, valor: valorSlug });
-            
-            salvarDados(); // Usa a função principal do sistema
-            atualizarSelectTiposAtendimento(); // Usa a função principal correta
-            
-            // Recarrega o modal para mostrar o novo item
-            document.getElementById('modalGerenciarTipos').remove();
-            document.getElementById('gerenciarAtendimentos').click();
-        }
-    };
-};
-
-// Função global para remover (agora compatível com o modal)
-window.removerTipoAtendimentoLocal = function(index) {
-    if (confirm('Tem certeza que deseja remover este tipo de atendimento?')) {
-        tiposAtendimento.splice(index, 1);
-        salvarDados();
-        atualizarSelectTiposAtendimento();
-        
-        // Recarrega o modal
-        document.getElementById('modalGerenciarTipos').remove();
-        document.getElementById('gerenciarAtendimentos').click();
-    }
-};
-    
-
-
-
-
-
-
-function filtrarPacientes() {
-    // Pega o que o usuário digitou
-    const termoBusca = document.getElementById('buscaPaciente').value.toLowerCase();
-    
-    // Pega todas as linhas da tabela de pacientes
-    // (Assumindo que você usa <tr> para cada paciente)
-    const linhas = document.querySelectorAll('#listaPacientesConteudo tr');
-
-    linhas.forEach(linha => {
-        // Pega o texto da primeira coluna (onde costuma estar o nome)
-        const nomePaciente = linha.querySelector('td').textContent.toLowerCase();
-        
-        if (nomePaciente.includes(termoBusca)) {
-            linha.style.display = ""; // Mostra se encontrar
-        } else {
-            linha.style.display = "none"; // Esconde se não encontrar
-        }
-    });
-}
-
-
-
-
-
-function abrirModalExportar() {
-    document.getElementById('modalExportar').style.display = 'flex';
-}
-
-function fecharModalExportar() {
-    document.getElementById('modalExportar').style.display = 'none';
-}
-
-function exportarProcessar(tipo) {
-    let dadosParaExportar = {
-        profissionais,
-        pacientes,
-        tiposAtendimento,
-        configsCaixaDia,
-        recebimentos: [],
-        despesas: []
-    };
-
-    const hoje = new Date();
-    
-    if (tipo === 'tudo') {
-        dadosParaExportar.recebimentos = recebimentos;
-        dadosParaExportar.despesas = despesas;
-    } else if (tipo === '7dias') {
-        const seteDiasAtras = new Date();
-        seteDiasAtras.setDate(hoje.getDate() - 7);
-        
-        dadosParaExportar.recebimentos = recebimentos.filter(r => new Date(r.data) >= seteDiasAtras);
-        dadosParaExportar.despesas = despesas.filter(d => new Date(d.data) >= seteDiasAtras);
-    } else if (tipo === 'periodo') {
-        const inicio = document.getElementById('exportDataInicio').value;
-        const fim = document.getElementById('exportDataFim').value;
-        
-        if (!inicio || !fim) {
-            alert("Por favor, selecione as duas datas.");
-            return;
-        }
-        
-        dadosParaExportar.recebimentos = recebimentos.filter(r => r.data >= inicio && r.data <= fim);
-        dadosParaExportar.despesas = despesas.filter(d => d.data >= inicio && d.data <= fim);
-    }
-
-    // Executa o download do ficheiro JSON
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dadosParaExportar, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", `backup_centro_medico_${tipo}_${new Date().toISOString().split('T')[0]}.json`);
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-    
-    fecharModalExportar();
-    alert(`Exportação (${tipo}) concluída com sucesso!`);
-}
-
-
-
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5159fc7468ba13',t:'MTc2OTYxMjM0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7c8d063199ba19',t:'MTc3MDA2NTMyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
